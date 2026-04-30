@@ -3,50 +3,84 @@
 /* Tailwind v4: use class-based dark mode so next-themes' <html class="dark"> works */
 @variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-brand-primary: #7C5CFF;
+  --color-brand-accent: #8B7CFF;
+  
+  --color-light-bg: #FFFFFF;
+  --color-light-sidebar: #F8F8F8;
+  --color-light-border: #EAEAEA;
+  --color-light-text-primary: #111827;
+  --color-light-text-secondary: #6B7280;
+  
+  --color-dark-bg: #0F1115;
+  --color-dark-sidebar: #151821;
+  --color-dark-cards: #1B1F2A;
+  --color-dark-border: #2A2F3A;
+  --color-dark-text-primary: #F8FAFC;
+  --color-dark-text-secondary: #94A3B8;
+
+  --color-success: #16A34A;
+  --color-warning: #F59E0B;
+  --color-error: #DC2626;
+}
+
 body {
   font-family: 'Mona Sans Variable', sans-serif;
   margin: 0;
   overflow: hidden;
   height: 100vh;
+  @apply bg-[var(--color-light-bg)] text-[var(--color-light-text-primary)];
+}
+
+.dark body {
+  @apply bg-[var(--color-dark-bg)] text-[var(--color-dark-text-primary)];
 }
 
 /* Glass UI Elements - Dynamic over Context */
 .glass-panel {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-light-border);
   box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
 }
 
 .dark .glass-panel {
-  background: rgba(18, 18, 18, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(27, 31, 42, 0.7);
+  border: 1px solid var(--color-dark-border);
   box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.3);
 }
 
 .glass-input {
   background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-light-border);
   transition: all 0.2s ease;
 }
 
 .dark .glass-input {
-  background: rgba(15, 15, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-dark-bg);
+  border: 1px solid var(--color-dark-border);
 }
 
 .glass-input:focus {
-  border-color: #ef4444; /* Red core accent focus */
+  border-color: var(--color-brand-primary);
   outline: none;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); /* Soft Red halo */
+  box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.2);
 }
 
-/* Internal overrides to match Red / Black styling */
+.dark .glass-input:focus {
+  border-color: var(--color-brand-accent);
+  box-shadow: 0 0 0 2px rgba(139, 124, 255, 0.2);
+}
+
 .prose-a {
-  color: #ef4444 !important;
+  color: var(--color-brand-primary) !important;
 }
 
-/* Scrollbar tweaks */
+.dark .prose-a {
+  color: var(--color-brand-accent) !important;
+}
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(100, 100, 100, 0.2); border-radius: 10px; }
