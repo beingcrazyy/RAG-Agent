@@ -62,37 +62,39 @@ def retrieve_context(state: AgentState) -> dict:
             data = json.loads(cached_result)
             return {"context": data["context"], "sources": data["sources"]}
 
-    print("CACHE MISS - Per-doc sampling + FlashRank reranking")
+    print("CACHE MISS - HNSW vector search + FlashRank reranking")
     embed_model = OpenAIEmbeddings(model="text-embedding-3-small")
     query_vector = embed_model.embed_query(query)
-    # OpenAI text-embedding-3-small natively produces 1536 dims — no padding needed
 
-    # 2. Per-document fair sampling
-    # Get top CHUNKS_PER_DOC best chunks from every document individually.
-    # This gives a 5-page resume equal footing with a 300-page annual report.
-    from src.models.document import Document
-    CHUNKS_PER_DOC = 20
+    # 2. Single global ANN query — HNSW index makes this O(log N) ~30ms
+    # Fetch top-60 globally; FlashRank picks the best 8.
+    # Fair per-doc coverage: 10 docs with relevant content will naturally surface.
+    from sqlalchemy import text
 
-    docs_in_workspace = db.query(Document).filter(
-        Document.workspace_id == workspace_id,
-        Document.status == "READY"
-    ).all()
+    vector_str = "[" + ",".join(str(x) for x in query_vector) + "]"
 
-    target_docs = docs_in_workspace
-    print(f"Retrieving from {len(target_docs)} docs")
+    sql = text("""
+        SELECT dc.id::text AS id,
+               dc.text     AS text,
+               dc.metadata_ AS metadata,
+               d.name      AS doc_name
+        FROM document_chunk dc
+        JOIN document d ON d.id = dc.document_id
+        WHERE d.workspace_id = CAST(:wsid AS uuid)
+          AND d.status = 'READY'
+        ORDER BY dc.embedding <=> CAST(:qvec AS vector)
+        LIMIT :lim
+    """)
 
-    all_candidates = []
-    for doc in target_docs:
-        doc_chunks = (
-            db.query(DocumentChunk)
-            .filter(DocumentChunk.document_id == doc.id)
-            .order_by(DocumentChunk.embedding.cosine_distance(query_vector))
-            .limit(CHUNKS_PER_DOC)
-            .all()
-        )
-        all_candidates.extend(doc_chunks)
+    rows = db.execute(sql, {
+        "qvec": vector_str,
+        "wsid": str(workspace_id),
+        "lim": 60,
+    }).fetchall()
 
-    if not all_candidates:
+    print(f"HNSW returned {len(rows)} candidates")
+
+    if not rows:
         return {"context": "No documents found in workspace.", "sources": []}
 
     # 3. FlashRank cross-encoder reranking over the full candidate pool
@@ -100,19 +102,20 @@ def retrieve_context(state: AgentState) -> dict:
     ranker = get_ranker()
 
     passages = []
-    for r in all_candidates:
-        p_num = r.metadata_.get("page", 0) if r.metadata_ else 0
+    for r in rows:
+        meta = r.metadata if isinstance(r.metadata, dict) else {}
+        p_num = meta.get("page", 0)
         passages.append({
-            "id": str(r.id),
+            "id": r.id,
             "text": r.text,
-            "meta": {"source": r.document.name, "page": p_num}
+            "meta": {"source": r.doc_name, "page": p_num}
         })
 
     rerankreq = RerankRequest(query=query, passages=passages)
     reranked = ranker.rerank(rerankreq)
 
-    # 4. Take top-15 after reranking for better recall
-    top_docs = reranked[:15]
+    # 4. Take top-8 after reranking — good recall, keeps prompt small for low latency
+    top_docs = reranked[:8]
 
     context_text = "\n\n".join([
         f"Source: {d['meta']['source']} (Page {int(d['meta']['page']) + 1}) | Text: {d['text']}"
@@ -123,9 +126,9 @@ def retrieve_context(state: AgentState) -> dict:
         f"{d['meta']['source']} • Page {int(d['meta']['page']) + 1}" for d in top_docs
     ]))
 
-    # 5. Cache result for 15 minutes
+    # 5. Cache result for 1 hour
     if rc and cache_key:
-        rc.setex(cache_key, 900, json.dumps({"context": context_text, "sources": unique_sources}))
+        rc.setex(cache_key, 3600, json.dumps({"context": context_text, "sources": unique_sources}))
 
     return {"context": context_text, "sources": unique_sources}
 

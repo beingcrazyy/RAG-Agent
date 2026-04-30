@@ -164,17 +164,23 @@ def chat_with_rag(
 
         yield b"[SYS:FOUND]|"
 
-        # Build a numbered context block so the LLM can reference sources by index
-        # Each source gets ALL its retrieved text concatenated (not just first match)
+        # Build a numbered context block — O(N) grouping by source
+        blocks_by_src: dict[str, list[str]] = {}
+        for block in context_str.split("\n\n"):
+            if not block.strip():
+                continue
+            text_part = block.split("| Text:")[-1].strip() if "| Text:" in block else block
+            for src in sources:
+                src_base = src.split(" \u2022 ")[0]
+                if src_base in block:
+                    blocks_by_src.setdefault(src_base, []).append(text_part)
+                    break
+
         numbered_lines = []
         for i, src in enumerate(sources, start=1):
-            src_base = src.split(" \u2022 ")[0]  # e.g. "resume.pdf"
-            blocks_for_src = [
-                block.split("| Text:")[-1].strip() if "| Text:" in block else block
-                for block in context_str.split("\n\n")
-                if src_base in block
-            ]
-            combined_text = " [...] ".join(blocks_for_src)[:3000]
+            src_base = src.split(" \u2022 ")[0]
+            parts = blocks_by_src.get(src_base, [])
+            combined_text = " [...] ".join(parts)[:1800]
             if combined_text:
                 numbered_lines.append(f"[{i}] {src_base}: {combined_text}")
 
@@ -197,7 +203,7 @@ def chat_with_rag(
             f"Question: {payload.message}\n\nAnswer:"
         )
 
-        llm = ChatOpenAI(model="gpt-4o", temperature=0.0, streaming=True)
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, streaming=True)
         
         full_response = ""
         try:
