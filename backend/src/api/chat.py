@@ -27,7 +27,7 @@ def create_thread(
     current_user: User = Depends(get_current_user)
 ):
     import uuid
-    thread = ChatThread(id=str(uuid.uuid4()), workspace_id=workspace_id, title="New Chat")
+    thread = ChatThread(id=str(uuid.uuid4()), workspace_id=workspace_id, user_id=current_user.id, title="New Chat")
     db.add(thread)
     db.commit()
     return {"id": str(thread.id), "title": thread.title}
@@ -38,8 +38,10 @@ def list_threads(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    # Each user only sees their own threads
     threads = db.query(ChatThread).filter(
-        ChatThread.workspace_id == workspace_id
+        ChatThread.workspace_id == workspace_id,
+        ChatThread.user_id == current_user.id,
     ).order_by(ChatThread.created_at.desc()).limit(20).all()
     return [{"id": str(t.id), "title": t.title, "date": "Recent"} for t in threads]
 
@@ -49,6 +51,11 @@ def get_historical_chat_context(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    thread = db.query(ChatThread).filter(ChatThread.id == thread_id).first()
+    if not thread:
+        raise HTTPException(status_code=404, detail="Thread not found")
+    if thread.user_id and thread.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your thread")
     msgs = db.query(ChatMessage).filter(
         ChatMessage.thread_id == thread_id
     ).order_by(ChatMessage.created_at.asc()).all()
@@ -63,7 +70,9 @@ def delete_thread_matrix(
     thread = db.query(ChatThread).filter(ChatThread.id == thread_id).first()
     if not thread:
         raise HTTPException(status_code=404, detail="Thread not found")
-        
+    if thread.user_id and thread.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your thread")
+
     db.delete(thread)
     db.commit()
     return {"status": "deleted"}
@@ -81,7 +90,9 @@ def rename_thread(
     thread = db.query(ChatThread).filter(ChatThread.id == thread_id).first()
     if not thread:
         raise HTTPException(status_code=404, detail="Thread not found")
-        
+    if thread.user_id and thread.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your thread")
+
     thread.title = payload.title
     db.commit()
     return {"id": thread.id, "title": thread.title}
@@ -114,11 +125,18 @@ def chat_with_rag(
     is_new = False
     if not thread:
         is_new = True
-        thread = ChatThread(id=payload.thread_id, workspace_id=workspace.id, title="New Chat")
+        thread = ChatThread(id=payload.thread_id, workspace_id=workspace.id, user_id=current_user.id, title="New Chat")
         db.add(thread)
         db.commit()
     elif thread.title in ["New RAG Conversation", "New Chat"]:
         is_new = True
+
+    # Ownership: only thread owner may post (admins also need their own threads)
+    if thread.user_id and thread.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your thread")
+    if not thread.user_id:
+        thread.user_id = current_user.id
+        db.commit()
 
     if is_new:
         try:
@@ -206,19 +224,46 @@ def chat_with_rag(
         if enterprise and enterprise.system_prompt:
             org_persona = f"ORGANISATION INSTRUCTIONS: {enterprise.system_prompt}\n"
 
+        # Pull recent conversation history for context (last 8 turns max)
+        prior_msgs = (
+            db.query(ChatMessage)
+            .filter(ChatMessage.thread_id == thread.id, ChatMessage.id != user_msg.id)
+            .order_by(ChatMessage.created_at.desc())
+            .limit(8)
+            .all()
+        )
+        prior_msgs.reverse()
+        history_block = ""
+        if prior_msgs:
+            lines = []
+            for m in prior_msgs:
+                speaker = "User" if m.role == "user" else "Assistant"
+                # strip any [[USED:...]] markers and trailing |SOURCES:...|
+                import re as _re_h
+                clean = _re_h.sub(r'\s*\[\[USED:.*?\]\]', '', m.content)
+                clean = _re_h.sub(r'\|SOURCES:.*?\|', '', clean).strip()
+                lines.append(f"{speaker}: {clean[:600]}")
+            history_block = "Conversation so far:\n" + "\n".join(lines) + "\n\n"
+
         system_prompt = (
             f"{org_persona}"
-            "You are a precise document assistant. Answer using ONLY the numbered sources below.\n"
-            "If the sources don't contain the answer, say so in one sentence.\n"
-            "CRITICAL RULES:\n"
-            "1. Be concise — answer in 2-4 sentences maximum unless the question explicitly asks to 'analyze', 'explain', 'trace', or 'describe'. For those, use up to 6 sentences.\n"
-            "2. Use exact figures and dates from the sources. Only use figures from the EXACT date or period asked.\n"
-            "3. If the question asks about a specific company, use ONLY sources from that company's document.\n"
-            "4. Do not use training knowledge — answer strictly from the sources provided.\n"
+            "You are a friendly, conversational AI assistant for the user's company knowledge base.\n"
+            "Answer naturally — like a helpful colleague — using ONLY the numbered sources below.\n"
+            "If the sources don't contain the answer, say so politely and suggest what info would help.\n\n"
+            "STYLE:\n"
+            "- Conversational tone. Acknowledge follow-ups (\"Sure\", \"Good question\", \"Building on that...\") when natural.\n"
+            "- Default length: 4-8 sentences. For 'analyze', 'explain', 'compare', 'walk me through', use up to 12 sentences with bullet points or short paragraphs.\n"
+            "- Use bullet points for lists, numbers, or comparisons when it improves clarity.\n"
+            "- Reference the conversation history when the user says 'it', 'that', 'the previous one', etc.\n"
+            "FACTS:\n"
+            "- Use exact figures, dates, and names from the sources.\n"
+            "- If the question targets a specific company/period, only use sources matching it.\n"
+            "- Do not use external/training knowledge — only the sources.\n\n"
             "At the END of your answer, on a new line, output exactly:\n"
             "[[USED:comma-separated-source-numbers]] or [[USED:NONE]]\n\n"
             f"Sources:\n{numbered_context}\n\n"
-            f"Question: {payload.message}\n\nAnswer:"
+            f"{history_block}"
+            f"Current user question: {payload.message}\n\nAnswer:"
         )
 
         # Enterprise can pick from preset models; fall back to platform default
@@ -228,9 +273,9 @@ def chat_with_rag(
             azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
             api_key=_az.AZURE_OPENAI_API_KEY,
             api_version=_az.AZURE_OPENAI_API_VERSION,
-            temperature=0.0,
+            temperature=0.3,
             streaming=True,
-            max_tokens=500,
+            max_tokens=1200,
         )
         
         full_response = ""

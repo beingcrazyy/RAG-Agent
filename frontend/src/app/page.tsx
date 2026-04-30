@@ -137,25 +137,15 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
       {/* Right auth pane */}
       <div className="w-full md:w-[520px] shrink-0 bg-white dark:bg-[#111] flex flex-col items-center justify-center p-10 shadow-2xl z-10 overflow-y-auto">
         <div className="w-full max-w-sm">
-          {/* Mode tabs */}
-          <div className="flex gap-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl p-1 mb-8">
-            {(['login', 'register-enterprise', 'register-user'] as AuthMode[]).map(m => (
-              <button
-                key={m}
-                onClick={() => { setMode(m); setError(''); setPendingMsg(''); }}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${mode === m ? 'bg-white dark:bg-[#222] shadow text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
-              >
-                {m === 'login' ? 'Login' : m === 'register-enterprise' ? 'Enterprise' : 'User'}
-              </button>
-            ))}
+          {/* Header with title */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+              {mode === 'login' ? 'Welcome back' : mode === 'register-enterprise' ? 'Create Enterprise' : 'Join an Enterprise'}
+            </h2>
+            <p className="text-slate-400 text-sm">
+              {mode === 'login' ? 'Sign in to your account.' : mode === 'register-enterprise' ? 'Set up your company workspace.' : 'Sign up with your company invite.'}
+            </p>
           </div>
-
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
-            {mode === 'login' ? 'Welcome back' : mode === 'register-enterprise' ? 'Create Enterprise' : 'Join an Enterprise'}
-          </h2>
-          <p className="text-slate-400 text-sm mb-6">
-            {mode === 'login' ? 'Sign in to your account.' : mode === 'register-enterprise' ? 'Set up your company RAG workspace.' : 'Sign up with your company invite or slug.'}
-          </p>
 
           {pendingMsg ? (
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 text-amber-800 dark:text-amber-300 text-sm">{pendingMsg}</div>
@@ -201,6 +191,37 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
                 {loading ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
               </button>
             </form>
+          )}
+
+          {/* Bottom alternates */}
+          {!pendingMsg && mode === 'login' && (
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+              <p className="text-xs text-slate-400 text-center mb-3">Don&apos;t have an account?</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => { setMode('register-user'); setError(''); }}
+                  className="py-2.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-400 transition-colors"
+                >
+                  Sign up as User
+                </button>
+                <button
+                  onClick={() => { setMode('register-enterprise'); setError(''); }}
+                  className="py-2.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-400 transition-colors"
+                >
+                  Sign up as Enterprise
+                </button>
+              </div>
+            </div>
+          )}
+          {!pendingMsg && mode !== 'login' && (
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-center">
+              <button
+                onClick={() => { setMode('login'); setError(''); }}
+                className="text-sm font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+              >
+                ← Back to Login
+              </button>
+            </div>
           )}
         </div>
       </div>

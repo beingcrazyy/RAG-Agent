@@ -76,6 +76,55 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
     return matchesTab && matchesSearch;
   });
 
+  // ── Member view: don't show file names — just a summary of what they can ask
+  if (!isAdmin) {
+    const totalDocs = dynamicDocs.length;
+    const categoryCounts: Record<string, number> = {};
+    dynamicDocs.forEach(d => { categoryCounts[d.category] = (categoryCounts[d.category] || 0) + 1; });
+
+    return (
+      <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#0a0a0a] overflow-y-auto">
+        <div className="px-10 py-10 border-b border-slate-200 dark:border-slate-800/50 bg-white dark:bg-[#0a0a0a]">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-3">
+              <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
+            </h2>
+            <p className="text-slate-500 mt-2">An overview of what your AI assistant has access to.</p>
+          </div>
+        </div>
+
+        <div className="flex-1 p-10">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-sm">
+              <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-2">Total documents indexed</p>
+              <p className="text-5xl font-bold text-slate-900 dark:text-white">{totalDocs}</p>
+              <p className="text-slate-500 mt-3 text-sm">You can ask the assistant any questions about the content of these documents.</p>
+            </div>
+
+            {Object.keys(categoryCounts).length > 0 && (
+              <div className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-sm">
+                <h3 className="font-bold text-slate-900 dark:text-white mb-4">Available content types</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {Object.entries(categoryCounts).map(([cat, count]) => (
+                    <div key={cat} className="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{cat}</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">{count}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-900/40 rounded-2xl p-6 text-sm text-slate-700 dark:text-slate-300">
+              <p className="font-semibold mb-1">Tip</p>
+              <p>Try asking specific questions like &quot;What was the Q4 revenue?&quot; or &quot;Summarize the latest policy update.&quot; The assistant will search across the documents and cite its sources.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#0a0a0a] transition-colors overflow-hidden">
 
@@ -87,21 +136,27 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
               <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
             </h2>
             <p className="text-slate-500 mt-2">
-              {isAdmin ? 'Manage documents that power your enterprise AI.' : 'Documents available in your workspace.'}
+              Manage documents that power your enterprise AI.
             </p>
           </div>
 
-          {isAdmin && (
-            <>
-              <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="application/pdf" />
-              <button onClick={() => fileInputRef.current?.click()} disabled={isUploading}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 px-6 font-semibold transition-all shadow-md disabled:opacity-50">
-                <CloudArrowUpIcon className={`w-6 h-6 ${isUploading ? "animate-pulse" : ""}`} />
-                {isUploading ? "Uploading…" : "Upload Document"}
-              </button>
-            </>
-          )}
+          <>
+            <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="application/pdf" />
+            <button onClick={() => fileInputRef.current?.click()} disabled={isUploading}
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 px-6 font-semibold transition-all shadow-md disabled:opacity-50">
+              <CloudArrowUpIcon className={`w-6 h-6 ${isUploading ? "animate-pulse" : ""}`} />
+              {isUploading ? "Uploading & indexing…" : "Upload Document"}
+            </button>
+          </>
         </div>
+        {isUploading && (
+          <div className="max-w-6xl mx-auto mt-4">
+            <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-900/40 rounded-xl px-4 py-3 text-sm text-amber-800 dark:text-amber-300 flex items-center gap-3">
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+              <span><strong>Indexing your document…</strong> This usually takes 10–30 seconds depending on size. Once it&apos;s ready, you&apos;ll be able to ask questions about it.</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-10">

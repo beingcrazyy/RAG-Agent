@@ -49,6 +49,8 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const authHeader = { "Authorization": `Bearer ${user?.access_token}`, "Content-Type": "application/json" };
   const workspaceId = user?.workspace_id;
+  const assistantLogoSrc = user?.logo_url ? `${apiBase}${user.logo_url}` : '/logo.png';
+  const assistantName = user?.enterprise_name || 'Loomind';
 
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -93,7 +95,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
         setMessages([{
           id: 1,
           role: 'assistant',
-          content: 'Hello! I am Loomind. I have full access to your uploaded documents. How can I help you today?',
+          content: `Hi! I'm your ${user?.enterprise_name || 'company'} AI assistant. I can answer questions based on your knowledge base. What would you like to know?`,
         }]);
       } else {
         // Parse stored messages: extract sources from persisted |SOURCES:...| strings
@@ -268,10 +270,10 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
                 msg.role === 'user' ? "flex-row-reverse" : "flex-row items-start"
               )}
             >
-              {/* Loomind Logo — vertically aligned with first line of text */}
+              {/* Assistant logo — vertically aligned with first line of text */}
               {msg.role === 'assistant' && (
                 <div className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center overflow-hidden bg-transparent mt-1">
-                  <img src="/logo.png" className="w-full h-full object-cover" alt="Loomind" />
+                  <img src={assistantLogoSrc} className="w-full h-full object-cover" alt={assistantName} />
                 </div>
               )}
 
@@ -346,7 +348,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
           {isTyping && (
             <div className="flex gap-3 items-start">
               <div className="w-7 h-7 rounded-lg shrink-0 overflow-hidden mt-1">
-                <img src="/logo.png" className="w-full h-full object-cover" alt="Loomind" />
+                <img src={assistantLogoSrc} className="w-full h-full object-cover" alt={assistantName} />
               </div>
               <div className="flex items-center gap-1 px-1 pt-2">
                 {[0,1,2].map(i => (
