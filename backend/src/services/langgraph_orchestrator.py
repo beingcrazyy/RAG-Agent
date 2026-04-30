@@ -62,30 +62,9 @@ def retrieve_context(state: AgentState) -> dict:
             data = json.loads(cached_result)
             return {"context": data["context"], "sources": data["sources"]}
 
-    print("CACHE MISS - HyDE + HNSW vector search + FlashRank reranking")
+    print("CACHE MISS - HNSW vector search + FlashRank reranking")
     embed_model = OpenAIEmbeddings(model="text-embedding-3-small")
-
-    # 2a. HyDE — Hypothetical Document Embeddings
-    # Problem: query text ("What was the decrease in Commercial paper?") lives in a
-    # different region of embedding space from the answer chunk ("Commercial paper 1,997 / 7,979").
-    # Fix: ask gpt-4o-mini to write a short hypothetical passage that WOULD answer the question.
-    # That text is in the same semantic space as the document chunks → much better cosine match.
-    # Then ensemble (average) the HyDE vector with the original query vector for robustness.
-    try:
-        hyde_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, max_tokens=120)
-        hyde_passage = hyde_llm.invoke([HumanMessage(content=(
-            f"Write a short, factual passage (2-3 sentences) that would directly answer "
-            f"this question as it would appear in a financial document, report, or book. "
-            f"Use plausible placeholder numbers/names if needed. Question: {query}"
-        ))]).content.strip()
-        print(f"HyDE passage: {hyde_passage[:100]}...")
-        hyp_vector = embed_model.embed_query(hyde_passage)
-        query_vector_raw = embed_model.embed_query(query)
-        # Ensemble: average query + hypothetical → robust to both lexical and semantic gaps
-        query_vector = [(q + h) / 2.0 for q, h in zip(query_vector_raw, hyp_vector)]
-    except Exception as e:
-        print(f"HyDE failed ({e}), falling back to raw query embedding")
-        query_vector = embed_model.embed_query(query)
+    query_vector = embed_model.embed_query(query)
 
     # 2b. Single global ANN query — HNSW index makes this O(log N) ~30ms
     # Fetch top-60 globally; FlashRank picks the best 8.

@@ -1,322 +1,322 @@
 {
   "summary": {
     "total": 46,
-    "answer_relevance": 0.776,
-    "faithfulness": 0.702,
-    "avg_latency_s": 5.69
+    "answer_relevance": 0.57,
+    "faithfulness": 0.533,
+    "avg_latency_s": 6.49
   },
   "evaluations": [
     {
       "question": "According to the footnotes, what was the total amount of losses (including impairments) specifically for non-marketable equity securities as of December 31, 2024?",
       "ground_truth": "As of December 31, 2024, the total amount of losses (including impairments) for non-marketable equity securities was $8.4 billion.",
-      "ai_response": "The total amount of losses (including impairments) specifically for non-marketable equity securities as of December 31, 2024, was $624 million in cumulative impairment/downward adjustments.",
-      "latency_s": 6.86,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response provides an incorrect figure for the total amount of losses for non-marketable equity securities, which does not match the ground truth."
-    },
-    {
-      "question": "Explain the fundamental difference in how 'realized net gain (loss) on equity securities sold during the period' and 'cumulative net gains (losses) on equity securities sold during the period' are calculated, according to the provided text.",
-      "ground_truth": "Realized net gain (loss) on equity securities sold during the period is calculated as the difference between the sale proceeds and the carrying value of the equity securities at the beginning of the period or the purchase date, if later. In contrast, cumulative net gains (losses) on equity securities sold during the period are calculated as the difference between the sale price and the initial purchase price for the equity security sold during the period.",
-      "ai_response": "The 'realized net gain (loss) on equity securities sold during the period' is calculated as the difference between the sale proceeds and the carrying value of the equity securities at the beginning of the period or the purchase date, if later. In contrast, 'cumulative net gains (losses) on equity securities sold during the period' represents the total net gains (losses) recognized after the initial purchase date of the equity security sold during the period, calculated as the difference between the sale price and the initial purchase price for the equity security sold.",
-      "latency_s": 6.74,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately explains both concepts as outlined in the ground truth, matching the definitions and calculations provided."
-    },
-    {
-      "question": "What is the par value for both Class A Common Stock and Class C Capital Stock, and on which exchange are these classes of stock registered?",
-      "ground_truth": "Both Class A Common Stock and Class C Capital Stock have a par value of $0.001 and are registered on the Nasdaq Stock Market LLC (Nasdaq Global Select Market).",
-      "ai_response": "The par value for both Class A Common Stock and Class C Capital Stock is $0.000006 per share. Both classes of stock are registered on The Nasdaq Stock Market LLC.",
-      "latency_s": 3.58,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response provides an incorrect par value and does not match the ground truth, which states the par value is $0.001."
-    },
-    {
-      "question": "Based on the checkmark indicators in the provided text, summarize Alphabet Inc.'s compliance status regarding SEC reports and its designated filer category.",
-      "ground_truth": "Alphabet Inc. has indicated that it has filed all reports required by Section 13 or 15(d) of the Securities Exchange Act of 1934 during the preceding 12 months, has submitted every Interactive Data File required during the preceding 12 months, and is classified as a 'Large accelerated filer'.",
-      "ai_response": "Alphabet Inc. is classified as a large accelerated filer, as indicated by the checkmark in the relevant sections of the documents. Additionally, it has submitted electronically every Interactive Data File required during the preceding 12 months. The company has also filed a report on and attestation to its management\u2019s assessment of the effectiveness of its internal control over financial reporting under Section 404(b) of the Sarbanes-Oxley Act.",
-      "latency_s": 4.78,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response accurately summarizes Alphabet Inc.'s classification and compliance with SEC reports but includes additional information about internal controls that was not in the ground truth."
-    },
-    {
-      "question": "What was the initial charge Google recognized in USD for the Android fine, and in what year was this charge recognized?",
-      "ground_truth": "Google recognized an initial charge of $5.1 billion for the Android fine in 2018.",
-      "ai_response": "The initial charge Google recognized for the Android fine was $5.1 billion, and this charge was recognized in the year 2018.",
-      "latency_s": 3.67,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately provides both the amount of the charge and the year it was recognized, matching the ground truth perfectly."
-    },
-    {
-      "question": "Compare the current status of the European Commission's Android antitrust case and the AdSense for Search antitrust case, specifically noting the General Court's decisions and the subsequent appeals.",
-      "ground_truth": "For the Android case, the General Court affirmed the EC decision in September 2022 but reduced the fine from \u20ac4.3 billion to \u20ac4.1 billion. Google subsequently appealed this affirmation to the European Court of Justice, where it remains pending. In contrast, for the AdSense for Search case, the General Court overturned the EC decision and annulled the \u20ac1.5 billion fine in September 2024. The EC has since appealed this decision to the European Court of Justice.",
-      "ai_response": "In the European Commission's Android antitrust case, the EC announced its decision in July 2018, imposing a \u20ac4.3 billion fine. The General Court affirmed this decision in September 2022 but reduced the fine to \u20ac4.1 billion. Google subsequently appealed the General Court's affirmation, and this appeal is still pending.\nIn the AdSense for Search antitrust case, the EC announced its decision in March 2019, imposing a \u20ac1.5 billion fine. However, in September 2024, the General Court overturned the EC's decision and annulled the fine. The EC has appealed this decision to the European Court of Justice.\nThus, the current status is that the Android case is still under appeal after a reduced fine, while the AdSense for Search case has seen the fine annulled, with the EC appealing that annulment.",
-      "latency_s": 39.68,
-      "answer_relevance": 1.0,
-      "faithfulness": 0.9,
-      "judge_reason": "The response accurately addresses the comparison of the two cases and their current statuses, but it incorrectly states the announcement date of the AdSense for Search case as March 2019 instead of the correct date."
-    },
-    {
-      "question": "For which specific volume licensing program mentioned in the text is Software Assurance explicitly stated as being *included*?",
-      "ground_truth": "Software Assurance is included with Open Value agreements.",
-      "ai_response": "Software Assurance (SA) is explicitly stated as being required to be purchased with certain volume licensing agreements, specifically with the Enterprise Agreement program.",
-      "latency_s": 2.87,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not answer the question about Software Assurance being included with Open Value agreements and instead discusses its requirement in the Enterprise Agreement program."
-    },
-    {
-      "question": "Based on the descriptions of the various volume licensing programs, summarize the different ways Software Assurance (SA) is handled or offered across these programs.",
-      "ground_truth": "Software Assurance (SA) is handled in several ways across the volume licensing programs: it is generally required to be purchased with certain volume licensing agreements and is an optional purchase with others. More specifically, SA is included with Open Value agreements. It is optional for customers that purchase perpetual licenses under Microsoft Products and Services Agreements and Select Plus agreements. For Enterprise Agreements, perpetual licenses are covered with SA.",
-      "ai_response": "Software Assurance (SA) is handled differently across various volume licensing programs as follows:\n1. **Enterprise Agreement**: SA is required to be purchased with certain volume licensing agreements, while it is optional with others. This program is designed for medium or large organizations that want to license Microsoft products and services organization-wide over a three-year period. Organizations can choose to purchase perpetual licenses (which include SA) or subscribe to cloud services.\n2. **Select Plus Agreement**: This agreement is tailored for government and academic organizations, allowing them to acquire on-premises licenses at any affiliate or department level. In this case, SA is optional.\n3. **General Licensing Options**: Microsoft offers various options for organizations of different sizes to purchase cloud services and on-premises software under volume licensing agreements. These agreements allow customers to acquire multiple licenses instead of separate retail licenses, and SA is included in some of these programs.\nOverall, SA is either required or optional depending on the specific volume licensing program chosen by the organization.",
-      "latency_s": 7.42,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.7,
-      "judge_reason": "The AI response summarizes the handling of Software Assurance across different programs but lacks specific details and clarity found in the ground truth."
-    },
-    {
-      "question": "As of June 30, 2025, what is the total amount of long-term debt principal and interest payments combined that are due in fiscal year 2026?",
-      "ground_truth": "The total amount of long-term debt principal and interest payments combined due in fiscal year 2026 is $4,509 million ($3,000 million for principal payments and $1,509 million for interest payments).",
-      "ai_response": "As of June 30, 2025, the total amount of long-term debt principal and interest payments combined that are due in fiscal year 2026 is as follows:\n- Principal payments: $3,000 million\n- Interest payments: $1,509 million\nTotal combined amount = $3,000 million + $1,509 million = $4,509 million.\nTherefore, the total amount due in fiscal year 2026 is $4,509 million.",
-      "latency_s": 5.05,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately provides the total amount of long-term debt principal and interest payments due in fiscal year 2026, matching the ground truth perfectly."
-    },
-    {
-      "question": "Compare the total capital returned to shareholders through share repurchases versus dividends in fiscal year 2025, and identify the remaining capacity in the share repurchase program as of June 30, 2025.",
-      "ground_truth": "In fiscal year 2025, Microsoft returned $13.0 billion to shareholders through share repurchases and declared $24.7 billion in dividends. As of June 30, 2025, $57.3 billion remained of the $60 billion share repurchase program.",
-      "ai_response": "In fiscal year 2025, the total capital returned to shareholders through share repurchases was $13.0 billion, while the total dividends declared amounted to $24.7 billion. \nAs of June 30, 2025, the remaining capacity in the share repurchase program was $57.3 billion out of a total authorized amount of $60 billion.",
-      "latency_s": 3.83,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects the information provided in the ground truth regarding capital returned to shareholders and the remaining capacity in the share repurchase program."
-    },
-    {
-      "question": "What was the reported revenue for Azure, and what was its percentage growth for the year?",
-      "ground_truth": "Azure surpassed $75 billion in revenue for the first time, growing by 34 percent.",
-      "ai_response": "The reported revenue for Azure was over $75 billion, with a percentage growth of 34% for the year.",
-      "latency_s": 2.82,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects the reported revenue and percentage growth for Azure as stated in the ground truth."
-    },
-    {
-      "question": "According to the text, what is Microsoft's overarching mission, and how does the company articulate its vision for how AI will empower individuals and organizations to achieve this mission?",
-      "ground_truth": "Microsoft's overarching mission is 'to empower every person and every organization on the planet to achieve more.' The company articulates its vision for AI as enabling a world where every person can get deep, contextual expertise paired with action on demand, and every organization can reinvent employee experiences, reimagine customer engagement, reshape business processes, and bend the curve on innovation, thereby unlocking the next level of productivity and growth for the world.",
-      "ai_response": "Microsoft's overarching mission is to empower every person and every organization on the planet to achieve more. The company articulates its vision for how AI will empower individuals and organizations by stating that AI is fundamentally transforming productivity for every individual, organization, and industry. Microsoft aims to create platforms and tools powered by AI that deliver innovative solutions to meet the evolving needs of its customers.",
-      "latency_s": 5.29,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.7,
-      "judge_reason": "The AI response captures the essence of Microsoft's mission but lacks specific details about how AI will empower individuals and organizations as articulated in the ground truth."
-    },
-    {
-      "question": "What was the total number of shares used in computing basic earnings per share for the three months ended December 28, 2024?",
-      "ground_truth": "The total number of shares used in computing basic earnings per share for the three months ended December 28, 2024, was 15,081,724.",
-      "ai_response": "The sources provided do not contain information regarding the total number of shares used in computing basic earnings per share for the three months ended December 28, 2024.",
-      "latency_s": 3.71,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not provide the requested information and instead states that it is unavailable."
-    },
-    {
-      "question": "Among the reportable segments, which one experienced the highest percentage growth in net sales from the three months ended December 28, 2024, to the three months ended December 27, 2025?",
-      "ground_truth": "Greater China experienced the highest percentage growth in net sales, increasing from $18,513 million in the three months ended December 28, 2024, to $25,526 million in the three months ended December 27, 2025.",
-      "ai_response": "The sources provided do not contain specific data for the three months ended December 28, 2024, or December 27, 2025. Therefore, I cannot determine which reportable segment experienced the highest percentage growth in net sales during that period.",
-      "latency_s": 2.86,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not answer the question and lacks factual grounding, as it fails to acknowledge the correct information provided in the ground truth."
-    },
-    {
-      "question": "What was the absolute decrease in 'Commercial paper' from September 27, 2025, to December 27, 2025?",
-      "ground_truth": "On September 27, 2025, 'Commercial paper' was $7,979 million. On December 27, 2025, it was $1,997 million. Therefore, the absolute decrease was $7,979 million - $1,997 million = $5,982 million.",
-      "ai_response": "The sources provided do not contain any information regarding the amount of 'Commercial paper' as of December 27, 2025. Therefore, I cannot determine the absolute decrease in 'Commercial paper' from September 27, 2025, to December 27, 2025.",
-      "latency_s": 4.1,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not provide any relevant information or calculations regarding the absolute decrease in 'Commercial paper' and incorrectly claims a lack of information."
-    },
-    {
-      "question": "Based on the provided balance sheet, identify the two specific current asset categories that contributed most significantly to the overall increase in total current assets from September 27, 2025, to December 27, 2025.",
-      "ground_truth": "Total current assets increased from $147,957 million on September 27, 2025, to $158,104 million on December 27, 2025. The two current asset categories that contributed most significantly to this increase were 'Cash and cash equivalents', which increased by $9,383 million ($45,317 million - $35,934 million), and 'Marketable securities' (current), which increased by $2,827 million ($21,590 million - $18,763 million).",
-      "ai_response": "To determine the two specific current asset categories that contributed most significantly to the overall increase in total current assets from September 27, 2025, to December 27, 2025, we can compare the current asset figures from the two balance sheets.\nFrom the balance sheet dated September 27, 2025:\n- Cash and cash equivalents: $35,934 million\n- Marketable securities: $18,763 million\n- Accounts receivable, net: $39,777 million\n- Vendor non-trade receivables: $33,180 million\n- Inventories: $5,718 million\n- Other current assets: $14,585 million\n- Total current assets: $147,957 million\nFrom the balance sheet dated December 27, 2025:\n- Cash and cash equivalents: $45,317 million\n- Marketable securities: $21,590 million\n- Accounts receivable, net: $39,921 million\n- Vendor non-trade receivables: $30,399 million\n- Inventories: $5,875 million\n- Other current assets: $15,002 million\n- Total current assets: $158,104 million\nNow, let's calculate the changes in the two balance sheets for each current asset category:\n1. Cash and cash equivalents: \n   - Increase: $45,317 million - $35,934 million = $9,383 million\n2. Marketable securities: \n   - Increase: $21,590 million - $18,763 million = $2,827 million\n3. Accounts receivable, net: \n   - Increase: $39,921 million - $39,777 million = $144 million\n4. Vendor non-trade receivables: \n   - Decrease: $30,399 million - $33,180 million = -$2,781 million\n5. Inventories: \n   - Increase: $5,875 million - $5,718 million = $157 million\n6. Other current assets: \n   - Increase: $15,002 million - $14,585 million = $417 million\nThe two categories with the most significant increases are:\n1. Cash and cash equivalents: $9,383 million\n2. Marketable securities: $2,827 million\nThus, the two specific current asset categories that contributed most significantly to the overall increase in total current assets from September 27, 2025, to December 27, 2025, are Cash and cash equivalents and Marketable securities.",
-      "latency_s": 10.11,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately identifies the two current asset categories that contributed most significantly to the increase in total current assets, matching the details provided in the ground truth."
-    },
-    {
-      "question": "What was the net cash flow impact from all marketable securities transactions (purchases, maturities, and sales) for the three months ended December 27, 2025?",
-      "ground_truth": "For the three months ended December 27, 2025, the net cash flow impact from marketable securities transactions was a cash outflow of $2,359 million, calculated from purchases of ($12,693 million), proceeds from maturities of $7,510 million, and proceeds from sales of $2,824 million.",
-      "ai_response": "The net cash flow impact from all marketable securities transactions (purchases, maturities, and sales) for the three months ended December 27, 2025, can be calculated as follows:\n- Purchases of marketable securities: $(12,693) million\n- Proceeds from maturities of marketable securities: $7,510 million\n- Proceeds from sales of marketable securities: $2,824 million\nNet cash flow impact = Proceeds from maturities + Proceeds from sales - Purchases\n= $7,510 + $2,824 - $12,693\n= $10,334 - $12,693\n= $(2,359) million\nThus, the net cash flow impact from all marketable securities transactions for the three months ended December 27, 2025, was $(2,359) million.",
-      "latency_s": 5.4,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately calculates and presents the net cash flow impact from marketable securities transactions as stated in the ground truth."
-    },
-    {
-      "question": "Analyze the primary factors contributing to the substantial increase in 'Cash generated by operating activities' for the three months ended December 27, 2025, compared to the same period in 2024.",
-      "ground_truth": "Cash generated by operating activities increased by $23,990 million, from $29,935 million in 2024 to $53,925 million in 2025. The most significant drivers for this increase are: 1) A substantial positive swing in 'Other current and non-current liabilities,' which shifted from a cash outflow of $11,998 million in 2024 to a cash inflow of $12,533 million in 2025, contributing $24,531 million more cash. 2) A significant positive swing in 'Accounts payable,' moving from a cash outflow of $6,671 million in 2024 to a cash inflow of $848 million in 2025, contributing $7,519 million more cash. 3) An increase in Net income by $5,767 million, from $36,330 million in 2024 to $42,097 million in 2025. These positive contributions were partially offset by a substantial negative swing in 'Other current and non-current assets,' which changed from a cash inflow of $939 million in 2024 to a cash outflow of $10,250 million in 2025, representing an $11,189 million reduction in cash.",
-      "ai_response": "The primary factors contributing to the substantial increase in 'Cash generated by operating activities' for the three months ended December 27, 2025, compared to the same period in 2024, are as follows:\n1. **Net Income Increase**: The net income for the three months ended December 27, 2025, was $42,097 million, which is an increase from $36,330 million for the same period in 2024. This increase in net income directly contributes to higher cash generated from operating activities.\n2. **Adjustments for Non-Cash Items**: The adjustments to reconcile net income to cash generated by operating activities also show an increase in share-based compensation expense from $3,286 million in 2024 to $3,594 million in 2025, which positively impacts cash flow.\n3. **Changes in Operating Assets and Liabilities**: There were significant changes in operating assets and liabilities. For instance, accounts payable increased by $848 million in 2025 compared to a decrease of $6,671 million in 2024, which indicates better cash management and timing of payments.\n4. **Other Current and Non-Current Liabilities**: The increase in other current and non-current liabilities by $12,533 million in 2025 compared to a decrease of $11,998 million in 2024 also contributed positively to cash generated from operating activities.\nOverall, the combination of increased net income, adjustments for non-cash items, and favorable changes in working capital accounts led to a significant increase in cash generated by operating activities for the three months ended December 27, 2025.",
-      "latency_s": 8.75,
-      "answer_relevance": 0.9,
-      "faithfulness": 0.8,
-      "judge_reason": "The AI response addresses the question and includes relevant factors, but it lacks some specific details and figures from the ground truth, particularly regarding the cash flow impacts of 'Other current and non-current assets.'"
-    },
-    {
-      "question": "What was Rich Dad's specific advice regarding the timing of going broke, and what was the rationale he provided?",
-      "ground_truth": "Rich dad thought it best to go broke before 30, advising, \u201cYou still have time to recover.\u201d",
-      "ai_response": "Rich Dad advised that it was best to go broke before the age of 30, stating, \u201cYou still have time to recover.\u201d This rationale was based on the belief that if one were to fail financially at a younger age, there would still be ample time to recover and rebuild.",
-      "latency_s": 3.47,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects Rich Dad's advice and rationale as stated in the ground truth."
-    },
-    {
-      "question": "The text presents two distinct theories that explain why many workers remain financially stagnant. Summarize these two theories and explain how, according to the author, they contribute to workers 'never get ahead.'",
-      "ground_truth": "The first theory is the clich\u00e9 'Job is an acronym for \u2018Just Over Broke,\u2019' which the author attributes to schools not teaching financial intelligence, causing most workers to live within their means. The second theory states that 'Workers work hard enough to not be fired, and owners pay just enough so that workers won\u2019t quit.' Both theories imply a system where workers are kept at a financial equilibrium that prevents them from accumulating wealth or advancing beyond their current state, thus contributing to them 'never get ahead.'",
-      "ai_response": "The text presents two theories regarding why many workers remain financially stagnant:\n1. **Management Theory of Workers and Owners**: This theory suggests that workers exert just enough effort to avoid being fired, while owners pay just enough to prevent workers from quitting. This creates a cycle where neither party is motivated to improve the situation, leading to a lack of advancement for workers.\n2. **Focus on Job Security**: The author argues that most workers have been conditioned to seek secure jobs, which leads them to live within their means and prioritize stability over financial growth. This mindset results in workers focusing on being \"Just Over Broke,\" which prevents them from taking risks that could lead to financial independence.\nAccording to the author, these theories contribute to workers \"never get ahead\" because they create an environment where minimal effort and risk-taking are the norms, thus hindering financial growth and independence.",
-      "latency_s": 6.68,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response summarizes the theories well but slightly misrepresents the second theory by not explicitly mentioning the lack of financial education as a contributing factor to workers' stagnation."
-    },
-    {
-      "question": "According to rich dad, what happens to the fear that drove many rich people to get wealthy once they have amassed a lot of money?",
-      "ground_truth": "Rich dad states that the fear that drove many rich people to get rich, which was the fear of being poor, often gets worse once they amass tons of money. This fear transforms into a terror of losing the money, the big houses, cars, and the high life it bought them.",
-      "ai_response": "According to rich dad, once many rich people have amassed a lot of money, the fear that drove them to get wealthy actually gets worse. They become terrified of losing it all, and the fears that initially motivated them to get rich intensify. This leads to a state where they are emotionally desperate and neurotic, despite appearing rich and having more money.",
-      "latency_s": 4.25,
-      "answer_relevance": 1.0,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response accurately addresses the question about the fear of losing wealth but introduces the terms 'emotionally desperate and neurotic,' which are not present in the ground truth."
-    },
-    {
-      "question": "Synthesize rich dad's perspective on why money ultimately fails to soothe the souls troubled by fear and desire, considering both those who pursue wealth and those who avoid it.",
-      "ground_truth": "Rich dad explains that while people desire money for the joy, pleasure, comfort, and security it can buy, this joy is often short-lived, leading to a continuous need for more. For the wealthy, the initial fear of being poor often intensifies into a fear of losing their amassed wealth, making them emotionally desperate and neurotic despite their riches. He concludes that money cannot soothe souls troubled by fear and desire, and that both the attachment to money and the avoidance of money are equally 'psychotic,' implying neither path leads to genuine contentment or peace from these underlying emotions.",
-      "ai_response": "Rich dad explains that money fails to soothe the souls troubled by fear and desire for several reasons. He suggests that people work for money primarily due to two emotions: desire and fear. While desire drives individuals to seek money for the joy and comfort they believe it can provide, this joy is often short-lived. As a result, they find themselves needing more money to achieve more joy, pleasure, and security, leading to a continuous cycle of work without fulfillment.\nOn the other hand, rich dad points out that many wealthy individuals are motivated by fear rather than desire. They accumulate wealth in the hope that it will eliminate their fear of poverty. However, this fear only intensifies as they become anxious about losing their wealth. This creates a trap where fear compels them to work harder, believing that money will eventually calm their fears, but it does not. Instead, the fear persists, leading to a life dominated by anxiety and turmoil.\nUltimately, rich dad emphasizes that money controls people's emotions and souls, rather than providing the peace and security they seek. Both those who pursue wealth and those who avoid it are caught in this emotional struggle, as money cannot address the deeper issues of fear and desire that trouble their souls.",
-      "latency_s": 7.28,
-      "answer_relevance": 0.9,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response effectively captures the essence of Rich Dad's perspective on the emotional struggles related to money, though it slightly lacks the explicit mention of the 'psychotic' nature of both attachment to and avoidance of money as stated in the ground truth."
-    },
-    {
-      "question": "Beyond the CASHFLOW game, what specific offerings does The Rich Dad Company provide today to support a person's financial education?",
-      "ground_truth": "The Rich Dad Company offers financial-education courses as well as the services of coaches and mentors to support a person\u2019s financial education.",
-      "ai_response": "Today, The Rich Dad Company offers financial-education courses as well as the services of coaches and mentors to support a person's financial education. These programs are especially important for anyone wanting to evolve out of the E and S quadrants into the B and I quadrants.",
-      "latency_s": 4.02,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects the offerings of The Rich Dad Company as stated in the ground truth."
-    },
-    {
-      "question": "Explain how the author's family background and their ingrained values made his personal transition between financial quadrants particularly challenging.",
-      "ground_truth": "The author's family consisted of highly educated employees in the E quadrant, and he carried their values of education, job security, benefits, and a government pension. These family values made his transition difficult because he had to actively disregard their warnings, concerns, and criticisms about becoming an entrepreneur and investor, which included statements like 'But you have to have a job,' 'You\u2019re taking too many risks,' and 'What if you fail?'",
-      "ai_response": "The author's family background and ingrained values made his transition between financial quadrants particularly challenging because he grew up in a family of highly educated employees who valued education, job security, benefits, and a government pension. These values were deeply rooted in the E quadrant (Employee quadrant), which emphasized stability and traditional career paths. As a result, the author faced significant emotional and spiritual challenges in changing his mindset to become an entrepreneur and investor. He had to shut out warnings, concerns, and criticisms from his family, which included beliefs such as needing to have a job, taking too many risks, fearing failure, and the pressure to pursue advanced degrees or stable professions like medicine. This conflict between his family's values and his desire to move into the B (Business) and I (Investor) quadrants made the transition difficult.",
-      "latency_s": 8.51,
-      "answer_relevance": 1.0,
-      "faithfulness": 0.9,
-      "judge_reason": "The response accurately addresses the author's family background and values, but it introduces additional details about emotional and spiritual challenges that are not explicitly mentioned in the ground truth."
-    },
-    {
-      "question": "What was the combined total of fixed and variable lease costs for the Company in 2023?",
-      "ground_truth": "The combined total of fixed and variable lease costs for the Company in 2023 was $15.9 billion ($2.0 billion for fixed payments on operating leases and $13.9 billion for variable payments).",
-      "ai_response": "The fixed lease costs for the Company in 2023 were $2.0 billion, and the variable lease costs were $13.9 billion. Therefore, the combined total of fixed and variable lease costs for 2023 is:\n$2.0 billion (fixed) + $13.9 billion (variable) = $15.9 billion.\nThus, the combined total of fixed and variable lease costs for the Company in 2023 was $15.9 billion.",
-      "latency_s": 3.94,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately provides the combined total of fixed and variable lease costs as stated in the ground truth."
-    },
-    {
-      "question": "Trace the legal journey of the European Commission's State Aid Decision from its initial announcement in 2016 to its current status, including the parties involved in each appeal and the expected next step.",
-      "ground_truth": "The European Commission announced its State Aid Decision on August 30, 2016. The Company and Ireland subsequently appealed this decision to the General Court, which annulled it on July 15, 2020. Following this, on September 25, 2020, the European Commission appealed the General Court\u2019s decision to the European Court of Justice (ECJ). A hearing was held on May 23, 2023, and a decision from the ECJ is expected in calendar year 2024. The adjusted recovery amount plus interest remains funded into escrow pending the conclusion of all legal proceedings.",
-      "ai_response": "The legal journey of the European Commission's State Aid Decision began with its announcement on August 30, 2016, which determined that Ireland had granted state aid to the Company by providing tax opinions in 1991 and 2007. This decision ordered Ireland to recover additional taxes from the Company for the period from June 2003 through December 2014.\nThe Company and Ireland appealed the State Aid Decision to the General Court of the Court of Justice of the European Union (the \u201cGeneral Court\u201d). On July 15, 2020, the General Court annulled the State Aid Decision. Subsequently, on September 25, 2020, the European Commission appealed the General Court\u2019s decision to the European Court of Justice (the \u201cECJ\u201d).\nA hearing regarding this appeal was held on May 23, 2023. On September 10, 2024, the ECJ announced that it had set aside the 2020 judgment of the General Court and confirmed the Commission\u2019s 2016 State Aid Decision. As a result, during the fourth quarter of 2024, the Company recorded a one-time income tax charge of $10.2 billion, which included a payable of $15.8 billion to Ireland, partially offset by a U.S. foreign tax credit of $4.8 billion.\nThe expected next step is that the decision from the ECJ is anticipated to have significant implications for the Company, and further actions may be taken in response to this ruling.",
-      "latency_s": 7.6,
-      "answer_relevance": 0.9,
-      "faithfulness": 0.8,
-      "judge_reason": "The response provides a detailed account of the legal journey but inaccurately states the ECJ's decision date and includes additional financial details not present in the ground truth."
-    },
-    {
-      "question": "As of what specific date were the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements concentrated among a few individual vendors primarily in Asia?",
-      "ground_truth": "As of September 30, 2023, the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements were concentrated among a few individual vendors located primarily in Asia.",
-      "ai_response": "As of September 30, 2023, the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements were concentrated among a few individual vendors located primarily in Asia.",
-      "latency_s": 3.58,
+      "ai_response": "The total amount of losses (including impairments) specifically for non-marketable equity securities as of December 31, 2024, was $8.4 billion.",
+      "latency_s": 6.44,
       "answer_relevance": 1.0,
       "faithfulness": 1.0,
       "judge_reason": "The AI response accurately answers the question and matches the ground truth perfectly."
     },
     {
+      "question": "Explain the fundamental difference in how 'realized net gain (loss) on equity securities sold during the period' and 'cumulative net gains (losses) on equity securities sold during the period' are calculated, according to the provided text.",
+      "ground_truth": "Realized net gain (loss) on equity securities sold during the period is calculated as the difference between the sale proceeds and the carrying value of the equity securities at the beginning of the period or the purchase date, if later. In contrast, cumulative net gains (losses) on equity securities sold during the period are calculated as the difference between the sale price and the initial purchase price for the equity security sold during the period.",
+      "ai_response": "The 'realized net gain (loss) on equity securities sold during the period' is calculated based on the difference between the sale price and the initial purchase price of the equity security sold during that specific period. In contrast, 'cumulative net gains (losses) on equity securities sold during the period' reflects the total net gains or losses recognized after the initial purchase date of the equity security, which may include gains or losses that were recognized in prior periods. This means that cumulative net gains (losses) provide a broader view of the economic performance of the securities over time, while realized net gains (losses) focus solely on the transactions occurring within the current period.",
+      "latency_s": 7.75,
+      "answer_relevance": 0.8,
+      "faithfulness": 0.7,
+      "judge_reason": "The AI response partially addresses the question but misstates the calculation of realized net gain (loss) by not mentioning the carrying value at the beginning of the period, leading to a lower faithfulness score."
+    },
+    {
+      "question": "What is the par value for both Class A Common Stock and Class C Capital Stock, and on which exchange are these classes of stock registered?",
+      "ground_truth": "Both Class A Common Stock and Class C Capital Stock have a par value of $0.001 and are registered on the Nasdaq Stock Market LLC (Nasdaq Global Select Market).",
+      "ai_response": "The par value for both Class A Common Stock and Class C Capital Stock is $0.001 per share. These classes of stock are registered on The Nasdaq Stock Market LLC.",
+      "latency_s": 5.25,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately provides the par value and the exchange registration as stated in the ground truth."
+    },
+    {
+      "question": "Based on the checkmark indicators in the provided text, summarize Alphabet Inc.'s compliance status regarding SEC reports and its designated filer category.",
+      "ground_truth": "Alphabet Inc. has indicated that it has filed all reports required by Section 13 or 15(d) of the Securities Exchange Act of 1934 during the preceding 12 months, has submitted every Interactive Data File required during the preceding 12 months, and is classified as a 'Large accelerated filer'.",
+      "ai_response": "Alphabet Inc. is classified as a large accelerated filer, as indicated by the checkmark in source [1]. Additionally, it has filed reports on and attestation to its management's assessment of the effectiveness of its internal control over financial reporting under Section 404(b) of the Sarbanes-Oxley Act, as shown in source [5].",
+      "latency_s": 5.83,
+      "answer_relevance": 0.7,
+      "faithfulness": 0.8,
+      "judge_reason": "The AI response correctly identifies Alphabet Inc. as a large accelerated filer but fails to mention its compliance with filing all required reports and Interactive Data Files as stated in the ground truth."
+    },
+    {
+      "question": "What was the initial charge Google recognized in USD for the Android fine, and in what year was this charge recognized?",
+      "ground_truth": "Google recognized an initial charge of $5.1 billion for the Android fine in 2018.",
+      "ai_response": "The sources do not contain information regarding an Android fine or the initial charge recognized by Google for it.",
+      "latency_s": 4.86,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not provide any relevant information regarding the Android fine or the recognized charge, failing to address the question."
+    },
+    {
+      "question": "Compare the current status of the European Commission's Android antitrust case and the AdSense for Search antitrust case, specifically noting the General Court's decisions and the subsequent appeals.",
+      "ground_truth": "For the Android case, the General Court affirmed the EC decision in September 2022 but reduced the fine from \u20ac4.3 billion to \u20ac4.1 billion. Google subsequently appealed this affirmation to the European Court of Justice, where it remains pending. In contrast, for the AdSense for Search case, the General Court overturned the EC decision and annulled the \u20ac1.5 billion fine in September 2024. The EC has since appealed this decision to the European Court of Justice.",
+      "ai_response": "In the AdSense for Search antitrust case, the General Court overturned the European Commission's (EC) decision and annulled the \u20ac1.5 billion fine in September 2024, but the EC has appealed this decision to the European Court of Justice. In contrast, the current status of the Android antitrust case is not detailed in the provided sources, so I cannot provide a comparison regarding that case.",
+      "latency_s": 7.01,
+      "answer_relevance": 0.5,
+      "faithfulness": 0.8,
+      "judge_reason": "The response accurately describes the AdSense for Search case but fails to provide information about the Android case, which affects its overall relevance."
+    },
+    {
+      "question": "For which specific volume licensing program mentioned in the text is Software Assurance explicitly stated as being *included*?",
+      "ground_truth": "Software Assurance is included with Open Value agreements.",
+      "ai_response": "The specific volume licensing program mentioned in the text that includes Software Assurance is the Enterprise Agreements.",
+      "latency_s": 4.72,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response incorrectly identifies the volume licensing program as Enterprise Agreements instead of Open Value agreements, which is the correct answer."
+    },
+    {
+      "question": "Based on the descriptions of the various volume licensing programs, summarize the different ways Software Assurance (SA) is handled or offered across these programs.",
+      "ground_truth": "Software Assurance (SA) is handled in several ways across the volume licensing programs: it is generally required to be purchased with certain volume licensing agreements and is an optional purchase with others. More specifically, SA is included with Open Value agreements. It is optional for customers that purchase perpetual licenses under Microsoft Products and Services Agreements and Select Plus agreements. For Enterprise Agreements, perpetual licenses are covered with SA.",
+      "ai_response": "Software Assurance (SA) is offered in conjunction with on-premises licenses in certain volume licensing programs, such as Enterprise Agreements, where it provides rights to new software and upgrades during the contract period. Revenue from SA is recognized ratably over the contract period, reflecting the simultaneous consumption and benefits received by customers. Additionally, unearned revenue related to SA is invoiced annually at the beginning of each contract period for multi-year agreements and is recognized as the performance obligations are satisfied over time.",
+      "latency_s": 7.8,
+      "answer_relevance": 0.6,
+      "faithfulness": 0.5,
+      "judge_reason": "The AI response provides some relevant information about Software Assurance but does not accurately summarize the specific handling of SA across all volume licensing programs as described in the ground truth."
+    },
+    {
+      "question": "As of June 30, 2025, what is the total amount of long-term debt principal and interest payments combined that are due in fiscal year 2026?",
+      "ground_truth": "The total amount of long-term debt principal and interest payments combined due in fiscal year 2026 is $4,509 million ($3,000 million for principal payments and $1,509 million for interest payments).",
+      "ai_response": "The sources do not contain the specific total amount of long-term debt principal and interest payments combined that are due in fiscal year 2026 as of June 30, 2025.",
+      "latency_s": 6.41,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not provide any relevant information regarding the total amount of long-term debt principal and interest payments due in fiscal year 2026."
+    },
+    {
+      "question": "Compare the total capital returned to shareholders through share repurchases versus dividends in fiscal year 2025, and identify the remaining capacity in the share repurchase program as of June 30, 2025.",
+      "ground_truth": "In fiscal year 2025, Microsoft returned $13.0 billion to shareholders through share repurchases and declared $24.7 billion in dividends. As of June 30, 2025, $57.3 billion remained of the $60 billion share repurchase program.",
+      "ai_response": "The total capital returned to shareholders through share repurchases in fiscal year 2025 was $64 billion, while dividends amounted to $16.5 billion, resulting in a total of $80.5 billion returned to shareholders. As of June 30, 2025, the remaining capacity in the share repurchase program was $50 billion.",
+      "latency_s": 5.55,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response provides incorrect figures for both share repurchases and dividends, and the remaining capacity in the share repurchase program is also inaccurate."
+    },
+    {
+      "question": "What was the reported revenue for Azure, and what was its percentage growth for the year?",
+      "ground_truth": "Azure surpassed $75 billion in revenue for the first time, growing by 34 percent.",
+      "ai_response": "The sources do not provide specific figures for Azure's reported revenue or its percentage growth for the year.",
+      "latency_s": 4.58,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not provide any relevant information regarding Azure's reported revenue or its percentage growth, and it contradicts the ground truth."
+    },
+    {
+      "question": "According to the text, what is Microsoft's overarching mission, and how does the company articulate its vision for how AI will empower individuals and organizations to achieve this mission?",
+      "ground_truth": "Microsoft's overarching mission is 'to empower every person and every organization on the planet to achieve more.' The company articulates its vision for AI as enabling a world where every person can get deep, contextual expertise paired with action on demand, and every organization can reinvent employee experiences, reimagine customer engagement, reshape business processes, and bend the curve on innovation, thereby unlocking the next level of productivity and growth for the world.",
+      "ai_response": "Microsoft's overarching mission is to create more personal computing that enables users to interact with technology in intuitive, engaging, and dynamic ways. The company articulates its vision for AI by launching initiatives like Microsoft Elevate, which aims to provide skills and opportunities for everyone to participate in the AI economy, investing $4 billion over five years in AI cloud technology for educational and nonprofit organizations, and helping 20 million people earn AI credentials within two years.",
+      "latency_s": 6.52,
+      "answer_relevance": 0.5,
+      "faithfulness": 0.4,
+      "judge_reason": "The AI response partially addresses Microsoft's mission but misrepresents it and lacks a clear articulation of how AI empowers individuals and organizations as described in the ground truth."
+    },
+    {
+      "question": "What was the total number of shares used in computing basic earnings per share for the three months ended December 28, 2024?",
+      "ground_truth": "The total number of shares used in computing basic earnings per share for the three months ended December 28, 2024, was 15,081,724.",
+      "ai_response": "The sources do not contain the total number of shares used in computing basic earnings per share for the three months ended December 28, 2024.",
+      "latency_s": 6.13,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not provide the requested information and instead states that the sources do not contain the total number of shares."
+    },
+    {
+      "question": "Among the reportable segments, which one experienced the highest percentage growth in net sales from the three months ended December 28, 2024, to the three months ended December 27, 2025?",
+      "ground_truth": "Greater China experienced the highest percentage growth in net sales, increasing from $18,513 million in the three months ended December 28, 2024, to $25,526 million in the three months ended December 27, 2025.",
+      "ai_response": "The source does not provide information on the percentage growth in net sales for the reportable segments from the three months ended December 28, 2024, to the three months ended December 27, 2025.",
+      "latency_s": 5.95,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not answer the question and lacks factual grounding, as it fails to identify the segment with the highest growth in net sales."
+    },
+    {
+      "question": "What was the absolute decrease in 'Commercial paper' from September 27, 2025, to December 27, 2025?",
+      "ground_truth": "On September 27, 2025, 'Commercial paper' was $7,979 million. On December 27, 2025, it was $1,997 million. Therefore, the absolute decrease was $7,979 million - $1,997 million = $5,982 million.",
+      "ai_response": "The sources do not provide information on the amount of commercial paper outstanding as of December 27, 2025, so I cannot determine the absolute decrease from September 27, 2025.",
+      "latency_s": 5.41,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not answer the question and incorrectly states that the information is unavailable, despite the ground truth providing the necessary data."
+    },
+    {
+      "question": "Based on the provided balance sheet, identify the two specific current asset categories that contributed most significantly to the overall increase in total current assets from September 27, 2025, to December 27, 2025.",
+      "ground_truth": "Total current assets increased from $147,957 million on September 27, 2025, to $158,104 million on December 27, 2025. The two current asset categories that contributed most significantly to this increase were 'Cash and cash equivalents', which increased by $9,383 million ($45,317 million - $35,934 million), and 'Marketable securities' (current), which increased by $2,827 million ($21,590 million - $18,763 million).",
+      "ai_response": "The two specific current asset categories that contributed most significantly to the overall increase in total current assets from September 27, 2025, to December 27, 2025, are cash and cash equivalents, which increased from $35,934 to $45,317, and marketable securities, which increased from $18,763 to $21,590. These increases contributed to a total current asset rise from $147,957 to $158,104.",
+      "latency_s": 7.58,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately identifies the two current asset categories and their respective increases, matching the details provided in the ground truth."
+    },
+    {
+      "question": "What was the net cash flow impact from all marketable securities transactions (purchases, maturities, and sales) for the three months ended December 27, 2025?",
+      "ground_truth": "For the three months ended December 27, 2025, the net cash flow impact from marketable securities transactions was a cash outflow of $2,359 million, calculated from purchases of ($12,693 million), proceeds from maturities of $7,510 million, and proceeds from sales of $2,824 million.",
+      "ai_response": "The net cash flow impact from all marketable securities transactions for the three months ended December 27, 2025, was a decrease of $2,359 million. This is calculated as follows: purchases of marketable securities ($12,693 million) minus proceeds from maturities ($7,510 million) and proceeds from sales ($2,824 million).",
+      "latency_s": 6.41,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately answers the question and is factually consistent with the ground truth provided."
+    },
+    {
+      "question": "Analyze the primary factors contributing to the substantial increase in 'Cash generated by operating activities' for the three months ended December 27, 2025, compared to the same period in 2024.",
+      "ground_truth": "Cash generated by operating activities increased by $23,990 million, from $29,935 million in 2024 to $53,925 million in 2025. The most significant drivers for this increase are: 1) A substantial positive swing in 'Other current and non-current liabilities,' which shifted from a cash outflow of $11,998 million in 2024 to a cash inflow of $12,533 million in 2025, contributing $24,531 million more cash. 2) A significant positive swing in 'Accounts payable,' moving from a cash outflow of $6,671 million in 2024 to a cash inflow of $848 million in 2025, contributing $7,519 million more cash. 3) An increase in Net income by $5,767 million, from $36,330 million in 2024 to $42,097 million in 2025. These positive contributions were partially offset by a substantial negative swing in 'Other current and non-current assets,' which changed from a cash inflow of $939 million in 2024 to a cash outflow of $10,250 million in 2025, representing an $11,189 million reduction in cash.",
+      "ai_response": "The substantial increase in 'Cash generated by operating activities' for the three months ended December 27, 2025, compared to the same period in 2024, can be attributed to several key factors. Net income rose significantly from $36,330 million in 2024 to $42,097 million in 2025, contributing positively to cash flow. Additionally, there were notable changes in operating assets and liabilities, particularly a decrease in accounts payable, which improved cash flow dynamics. The adjustments for depreciation and amortization also increased, further enhancing the cash generated from operating activities.",
+      "latency_s": 8.72,
+      "answer_relevance": 0.6,
+      "faithfulness": 0.5,
+      "judge_reason": "The AI response addresses some factors contributing to the increase in cash generated by operating activities but lacks specific details and misrepresents the changes in accounts payable and other key drivers mentioned in the ground truth."
+    },
+    {
+      "question": "What was Rich Dad's specific advice regarding the timing of going broke, and what was the rationale he provided?",
+      "ground_truth": "Rich dad thought it best to go broke before 30, advising, \u201cYou still have time to recover.\u201d",
+      "ai_response": "Rich Dad advised that it was best to go broke early in life to test one's wings and learn valuable lessons. He believed that this approach would help individuals grow into wise, wealthy, and happy people, rather than spending their lives blaming external factors for their financial problems.",
+      "latency_s": 5.41,
+      "answer_relevance": 0.8,
+      "faithfulness": 0.7,
+      "judge_reason": "The AI response captures the essence of Rich Dad's advice about going broke early but does not explicitly mention the age of 30 or the specific rationale of having time to recover."
+    },
+    {
+      "question": "The text presents two distinct theories that explain why many workers remain financially stagnant. Summarize these two theories and explain how, according to the author, they contribute to workers 'never get ahead.'",
+      "ground_truth": "The first theory is the clich\u00e9 'Job is an acronym for \u2018Just Over Broke,\u2019' which the author attributes to schools not teaching financial intelligence, causing most workers to live within their means. The second theory states that 'Workers work hard enough to not be fired, and owners pay just enough so that workers won\u2019t quit.' Both theories imply a system where workers are kept at a financial equilibrium that prevents them from accumulating wealth or advancing beyond their current state, thus contributing to them 'never get ahead.'",
+      "ai_response": "The first theory suggests that workers only exert enough effort to avoid being fired, while employers pay just enough to prevent workers from quitting. This creates a cycle of minimal engagement and productivity, leading to financial stagnation. The second theory posits that the lack of financial education results in workers accumulating liabilities without generating real assets, making them overly dependent on their paychecks. This dependency prevents them from seizing opportunities that could improve their financial situation, ultimately contributing to their inability to get ahead.",
+      "latency_s": 6.56,
+      "answer_relevance": 0.7,
+      "faithfulness": 0.6,
+      "judge_reason": "The AI response captures some elements of the theories but misattributes the first theory and does not fully align with the ground truth's explanation of financial stagnation."
+    },
+    {
+      "question": "According to rich dad, what happens to the fear that drove many rich people to get wealthy once they have amassed a lot of money?",
+      "ground_truth": "Rich dad states that the fear that drove many rich people to get rich, which was the fear of being poor, often gets worse once they amass tons of money. This fear transforms into a terror of losing the money, the big houses, cars, and the high life it bought them.",
+      "ai_response": "According to rich dad, the fear that drove many rich people to get wealthy diminishes once they have amassed a lot of money. This shift in mindset can lead to complacency, as the initial motivation of fear is replaced by a sense of security.",
+      "latency_s": 6.13,
+      "answer_relevance": 0.5,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response contradicts the ground truth by stating that the fear diminishes, while the ground truth indicates it actually worsens."
+    },
+    {
+      "question": "Synthesize rich dad's perspective on why money ultimately fails to soothe the souls troubled by fear and desire, considering both those who pursue wealth and those who avoid it.",
+      "ground_truth": "Rich dad explains that while people desire money for the joy, pleasure, comfort, and security it can buy, this joy is often short-lived, leading to a continuous need for more. For the wealthy, the initial fear of being poor often intensifies into a fear of losing their amassed wealth, making them emotionally desperate and neurotic despite their riches. He concludes that money cannot soothe souls troubled by fear and desire, and that both the attachment to money and the avoidance of money are equally 'psychotic,' implying neither path leads to genuine contentment or peace from these underlying emotions.",
+      "ai_response": "Rich dad suggests that money is an illusion, maintained by the fear and greed of people who believe in its reality. He argues that both the wealthy and those who avoid wealth are influenced by these emotions, which ultimately do not provide true solace. Instead, he believes that the pursuit of money can lead to a deeper understanding of the human condition, revealing that the real issue lies in the emotional responses to money rather than money itself.",
+      "latency_s": 7.67,
+      "answer_relevance": 0.7,
+      "faithfulness": 0.6,
+      "judge_reason": "The AI response touches on the emotional aspects of money but lacks the depth and specific insights from the ground truth regarding the short-lived joy of wealth and the neurotic fears of the wealthy."
+    },
+    {
+      "question": "Beyond the CASHFLOW game, what specific offerings does The Rich Dad Company provide today to support a person's financial education?",
+      "ground_truth": "The Rich Dad Company offers financial-education courses as well as the services of coaches and mentors to support a person\u2019s financial education.",
+      "ai_response": "The Rich Dad Company provides a range of educational products designed to teach financial skills, including books and games that focus on converting earned income into passive and portfolio income. They also emphasize the importance of financial education through various platforms, including mobile and online gaming, as part of their offerings.",
+      "latency_s": 6.81,
+      "answer_relevance": 0.6,
+      "faithfulness": 0.7,
+      "judge_reason": "The response mentions educational products and financial skills but does not specifically address the courses, coaches, and mentors that are part of the ground truth."
+    },
+    {
+      "question": "Explain how the author's family background and their ingrained values made his personal transition between financial quadrants particularly challenging.",
+      "ground_truth": "The author's family consisted of highly educated employees in the E quadrant, and he carried their values of education, job security, benefits, and a government pension. These family values made his transition difficult because he had to actively disregard their warnings, concerns, and criticisms about becoming an entrepreneur and investor, which included statements like 'But you have to have a job,' 'You\u2019re taking too many risks,' and 'What if you fail?'",
+      "ai_response": "The author's family background, particularly the contrasting influences of his \"rich dad\" and \"poor dad,\" created a complex foundation for his financial beliefs and values. His \"poor dad\" represented traditional views on education and job security, which often conflicted with the entrepreneurial mindset of his \"rich dad.\" This duality made it challenging for him to shift from the E and S quadrants to the B and I quadrants, as he had to overcome deeply ingrained beliefs about money and success. The emotional and spiritual support necessary for such a transition was crucial, as simply deciding to change without addressing these underlying values would be ineffective.",
+      "latency_s": 7.79,
+      "answer_relevance": 0.8,
+      "faithfulness": 0.7,
+      "judge_reason": "The AI response addresses the author's family background and the challenges of transitioning between financial quadrants, but it introduces the concept of 'rich dad' and 'poor dad' which is not mentioned in the ground truth, affecting its factual accuracy."
+    },
+    {
+      "question": "What was the combined total of fixed and variable lease costs for the Company in 2023?",
+      "ground_truth": "The combined total of fixed and variable lease costs for the Company in 2023 was $15.9 billion ($2.0 billion for fixed payments on operating leases and $13.9 billion for variable payments).",
+      "ai_response": "The combined total of fixed and variable lease costs for the Company in 2023 was $15.9 billion, consisting of $2.0 billion in fixed payments and $13.9 billion in variable payments.",
+      "latency_s": 5.83,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately answers the question and is factually consistent with the ground truth provided."
+    },
+    {
+      "question": "Trace the legal journey of the European Commission's State Aid Decision from its initial announcement in 2016 to its current status, including the parties involved in each appeal and the expected next step.",
+      "ground_truth": "The European Commission announced its State Aid Decision on August 30, 2016. The Company and Ireland subsequently appealed this decision to the General Court, which annulled it on July 15, 2020. Following this, on September 25, 2020, the European Commission appealed the General Court\u2019s decision to the European Court of Justice (ECJ). A hearing was held on May 23, 2023, and a decision from the ECJ is expected in calendar year 2024. The adjusted recovery amount plus interest remains funded into escrow pending the conclusion of all legal proceedings.",
+      "ai_response": "The European Commission announced its State Aid Decision on August 30, 2016, which ordered Ireland to recover additional taxes from Apple Inc. for the period June 2003 through December 2014. Apple and Ireland appealed this decision to the General Court of the Court of Justice of the European Union, which annulled the decision on July 15, 2020. The European Commission then appealed to the European Court of Justice (ECJ) on September 25, 2020. A hearing was held on May 23, 2023, and a decision from the ECJ is expected in calendar year 2024.",
+      "latency_s": 6.88,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately traces the legal journey of the European Commission's State Aid Decision, including all relevant dates, parties involved, and expected next steps, matching the ground truth."
+    },
+    {
+      "question": "As of what specific date were the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements concentrated among a few individual vendors primarily in Asia?",
+      "ground_truth": "As of September 30, 2023, the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements were concentrated among a few individual vendors located primarily in Asia.",
+      "ai_response": "As of September 30, 2023, the Company\u2019s vendor non-trade receivables and prepayments related to long-term supply agreements were concentrated among a few individual vendors located primarily in Asia.",
+      "latency_s": 5.56,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately reflects the information provided in the ground truth, including the specific date and details about vendor concentration."
+    },
+    {
       "question": "Based on the text, what are the key factors that influence the Company's effective tax rates?",
       "ground_truth": "The Company\u2019s effective tax rates are affected by changes in the mix of earnings in countries with differing statutory tax rates, changes in the valuation of deferred tax assets and liabilities, the introduction of new taxes, and changes in tax laws or their interpretation.",
-      "ai_response": "The key factors that influence the Company's effective tax rates include:\n1. Changes in the mix of earnings in countries with differing statutory tax rates.\n2. Changes in the valuation of deferred tax assets and liabilities.\n3. The introduction of new taxes.\n4. Changes in tax laws or their interpretation.\n5. Economic and political conditions that may affect tax laws and tax rates in various jurisdictions.",
-      "latency_s": 3.74,
+      "ai_response": "The key factors that influence the Company's effective tax rates include the effective tax rate on foreign earnings, the impact of the U.S. federal R&D credit, tax benefits from share-based compensation, and state income taxes. Additionally, changes in the mix of earnings in countries with differing statutory tax rates, valuation of deferred tax assets and liabilities, and the introduction of new taxes or changes in tax laws also play a significant role.",
+      "latency_s": 6.66,
       "answer_relevance": 0.9,
       "faithfulness": 0.8,
-      "judge_reason": "The AI response accurately lists the key factors from the ground truth but adds an additional factor that is not mentioned in the original text."
+      "judge_reason": "The AI response includes relevant factors but introduces additional elements not mentioned in the ground truth, affecting its overall accuracy."
     },
     {
       "question": "As of December 31, 2024, what was the closing price per share for the Class A common stock and how many stockholders of record were there for this class of stock?",
       "ground_truth": "As of December 31, 2024, the closing price of the Class A common stock was $585.51 per share, and there were 2,931 stockholders of record.",
-      "ai_response": "As of December 31, 2024, the closing price per share for the Class A common stock was $585.51, and there were 2,931 stockholders of record for this class of stock.",
-      "latency_s": 2.96,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately provides the closing price per share and the number of stockholders of record as stated in the ground truth."
+      "ai_response": "The sources do not provide information on the closing price per share for the Class A common stock or the number of stockholders of record for this class of stock as of December 31, 2024.",
+      "latency_s": 5.19,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not provide any relevant information regarding the closing price or the number of stockholders, and it does not align with the ground truth."
     },
     {
       "question": "Outline the company's dividend policy, specifying when the quarterly cash dividend began, the per-share amount, and which types of equity (common stock and RSUs) are entitled to receive dividends or dividend equivalent rights, along with any conditions for RSUs.",
       "ground_truth": "The company's board of directors began declaring a quarterly cash dividend in February 2024. The dividend amount is $0.50 per share and applies to both Class A and Class B common stock. Additionally, RSUs granted on or after March 1, 2024, under the 2012 Equity Incentive Plan (Amended 2012 Plan), which was most recently amended in May 2024, are entitled to dividend equivalent rights.",
-      "ai_response": "The company's dividend policy is as follows:\n- The quarterly cash dividend began in February 2024.\n- The per-share amount of the dividend is $0.50 for both Class A and Class B common stock.\n- RSUs (Restricted Stock Units) granted on or after March 1, 2024, under the 2012 Equity Incentive Plan (Amended 2012 Plan), are entitled to dividend equivalent rights.\n- The payment of future dividends is subject to the discretion of the board of directors and depends on various factors, including the company's financial condition, operating results, available cash, and current and anticipated cash needs.",
-      "latency_s": 4.31,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately outlines the company's dividend policy, including the start date, per-share amount, and conditions for RSUs, matching the ground truth."
+      "ai_response": "The company's dividend policy includes a quarterly cash dividend of $0.23 per share, which began on September 24, 2022. Both common stock and RSUs are entitled to receive dividends or dividend equivalent rights. For RSUs, the Dividend Equivalent Rights are credited based on the per share cash dividend paid, multiplied by the total number of RSUs outstanding on the record date, and are subject to the same terms and conditions as the original RSUs, including the obligation to satisfy Tax-Related Items.",
+      "latency_s": 6.14,
+      "answer_relevance": 0.7,
+      "faithfulness": 0.2,
+      "judge_reason": "The AI response provides some relevant information about dividends and RSUs but contains incorrect figures and dates that do not match the ground truth."
     },
     {
       "question": "According to the policy, what specific types of changes to a 10b5-1 Trading Plan are explicitly stated *not* to constitute a 'Modification'?",
       "ground_truth": "Changes that do not constitute a 'Modification' include administrative or other immaterial changes that do not affect the amount, price or timing of purchases or sales under the plan, such as correcting grant identifiers or correcting typos or other scriveners errors. Additionally, re-assignment of a plan to another broker will not constitute a 'Modification' provided such re-assignment does not result in any change to existing purchase or sale instructions.",
-      "ai_response": "The sources provided do not contain information regarding specific types of changes to a 10b5-1 Trading Plan that are explicitly stated not to constitute a 'Modification.'",
-      "latency_s": 2.88,
-      "answer_relevance": 0.0,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not address the specific types of changes that do not constitute a 'Modification' as outlined in the ground truth."
+      "ai_response": "The policy states that administrative or other immaterial changes that do not affect the amount, price, or timing of purchases or sales under the plan do not constitute a 'Modification'. Examples of such changes include minor adjustments that do not alter the fundamental terms of the trading plan.",
+      "latency_s": 5.51,
+      "answer_relevance": 0.7,
+      "faithfulness": 0.8,
+      "judge_reason": "The AI response addresses the question but lacks specific examples and details provided in the ground truth, such as correcting grant identifiers and re-assignment of a plan to another broker."
     },
     {
       "question": "Beyond the explicit restrictions on hedging, short sales, or transactions in derivative securities, what are the two primary conditions that must be met for a 10b5-1 Trading Plan to be adopted, modified, or terminated, and what specific information must be included if the plan involves Future RSU Grants?",
       "ground_truth": "For a 10b5-1 Trading Plan to be adopted, modified, or terminated, the person must not be in possession of material nonpublic information concerning the company or its securities, and must not be subject to a Closed Trading Period (either Regular or Special). If the plan involves Future RSU Grants, it must specify the amount, price, and date of transactions in shares underlying those grants.",
-      "ai_response": "The two primary conditions that must be met for a 10b5-1 Trading Plan to be adopted, modified, or terminated are: (i) the person must not be in possession of material nonpublic information concerning the company or its securities, and (ii) the plan must not be subject to a Closed Trading Period (whether a Regular Closed Trading Period or a Special Closed Trading Period). \nIf the plan involves Future RSU Grants, it must specify the amount, price, and date of transactions in shares underlying those Future RSU Grants.",
-      "latency_s": 4.4,
+      "ai_response": "The two primary conditions that must be met for a 10b5-1 Trading Plan to be adopted, modified, or terminated are that the person must not be in possession of material nonpublic information concerning the company or its securities and the plan must not be subject to a Closed Trading Period. If the plan involves Future RSU Grants, it must specify the amount, price, and date of transactions in shares underlying those grants.",
+      "latency_s": 9.19,
       "answer_relevance": 1.0,
       "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects the conditions for a 10b5-1 Trading Plan and the requirements for Future RSU Grants as stated in the ground truth."
+      "judge_reason": "The AI response accurately reflects the conditions and requirements for a 10b5-1 Trading Plan as stated in the ground truth."
     },
     {
       "question": "What specific Internal Revenue Service forms are explicitly mentioned as examples of documentation required as a precondition to tax exemption?",
       "ground_truth": "The text explicitly mentions Internal Revenue Service Forms W-8BEN, W-8BEN-E, and W-8ECI, or any subsequent versions or successors thereto, as examples of documentation required as a precondition to tax exemption.",
-      "ai_response": "The specific Internal Revenue Service forms explicitly mentioned as examples of documentation required as a precondition to tax exemption are W-8BEN, W-8BEN-E, and W-8ECI.",
-      "latency_s": 3.22,
+      "ai_response": "The specific Internal Revenue Service forms explicitly mentioned as examples of documentation required as a precondition to tax exemption are Forms W-8BEN, W-8BEN-E, and W-8ECI, along with any subsequent versions thereof or successor thereto.",
+      "latency_s": 6.49,
       "answer_relevance": 1.0,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response accurately lists the forms mentioned in the ground truth but omits the reference to subsequent versions or successors, which is part of the complete information."
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately lists the specific IRS forms mentioned in the ground truth and maintains the same meaning."
     },
     {
       "question": "Beyond issues related to certification or information reporting, describe three distinct types of circumstances under which the Company would not be required to make additional payments for taxes.",
       "ground_truth": "The Company would not be required to make additional payments for taxes in several distinct circumstances, including: (1) if the Tax is imposed otherwise than by withholding by the Company or a Paying Agent from the payment (item 4); (2) if the Tax is an estate, inheritance, gift, sales, excise, transfer, wealth, capital gains, or personal property tax (item 6); and (3) if the Tax would not have been imposed but for the presentation of any Note for payment on a date more than 30 days after it became due or was duly provided for (item 8).",
-      "ai_response": "The sources do not provide specific circumstances under which the Company would not be required to make additional payments for taxes beyond issues related to certification or information reporting. Therefore, I cannot provide an answer to your question based on the available documents.",
-      "latency_s": 3.44,
+      "ai_response": "The sources do not provide specific information regarding three distinct types of circumstances under which the Company would not be required to make additional payments for taxes.",
+      "latency_s": 13.2,
       "answer_relevance": 0.0,
       "faithfulness": 0.0,
-      "judge_reason": "The AI response does not address the question and fails to provide any relevant information regarding the circumstances under which the Company would not be required to make additional payments for taxes."
+      "judge_reason": "The AI response does not provide any relevant information or circumstances as requested in the question."
     },
     {
       "question": "What was the Company's quarterly dividend per share immediately prior to the increase announced in May 2025?",
       "ground_truth": "Immediately prior to the increase announced in May 2025, the Company's quarterly dividend per share was $0.25.",
-      "ai_response": "The Company's quarterly dividend per share immediately prior to the increase announced in May 2025 was $0.25 per share.",
-      "latency_s": 3.46,
+      "ai_response": "The Company's quarterly dividend per share immediately prior to the increase announced in May 2025 was $0.25.",
+      "latency_s": 5.05,
       "answer_relevance": 1.0,
       "faithfulness": 1.0,
       "judge_reason": "The AI response accurately answers the question and matches the ground truth perfectly."
@@ -324,101 +324,101 @@
     {
       "question": "Summarize the key disclosure requirements that ASU 2024-03 will impose on the Company regarding the disaggregation of income statement expenses.",
       "ground_truth": "ASU 2024-03 will require the Company to disclose the amounts of purchases of inventory, employee compensation, depreciation, and intangible asset amortization included in certain expense captions, along with a qualitative description of remaining amounts. It will also require disclosure of both the amount and the Company\u2019s definition of selling expenses.",
-      "ai_response": "ASU 2024-03 will require the Company to disclose disaggregated information about certain income statement expense line items on both an annual and interim basis. Specifically, the Company will need to provide a disaggregation of certain expense categories included within the expense captions on the face of the income statement. This standard is effective for annual periods beginning in the year ended December 31, 2027, and for interim periods thereafter. The Company is currently evaluating the effect that this guidance will have on its consolidated financial statements and related disclosures.",
-      "latency_s": 4.69,
-      "answer_relevance": 0.7,
-      "faithfulness": 0.6,
-      "judge_reason": "The AI response provides some relevant information about disaggregation requirements but lacks specific details about the required disclosures of inventory purchases, employee compensation, depreciation, and intangible asset amortization, as well as the definition of selling expenses."
+      "ai_response": "ASU 2024-03 will require the Company to disclose the amounts of purchases of inventory, employee compensation, depreciation, and intangible asset amortization included in certain expense captions in the Consolidated Statements of Operations. Additionally, the Company must qualitatively describe the remaining amounts in those captions and disclose both the amount and its definition of selling expenses. This standard will be adopted in the fourth quarter of 2028.",
+      "latency_s": 6.51,
+      "answer_relevance": 1.0,
+      "faithfulness": 0.9,
+      "judge_reason": "The response accurately summarizes the key disclosure requirements but incorrectly states the adoption date as the fourth quarter of 2028, which is not mentioned in the ground truth."
     },
     {
       "question": "What specific characteristics define the highly competitive global markets in which the Company's products and services are offered?",
       "ground_truth": "The highly competitive global markets are characterized by aggressive price competition and resulting downward pressure on gross margins, frequent introduction of new products and services, short product life cycles, evolving industry standards, continual improvement in product price and performance characteristics, rapid adoption of technological advancements by competitors, and price sensitivity on the part of consumers and businesses.",
-      "ai_response": "The highly competitive global markets in which the Company's products and services are offered are characterized by the following specific characteristics:\n1. Aggressive price competition and resulting downward pressure on gross margins.\n2. Frequent introduction of new products and services.\n3. Short product life cycles.\n4. Evolving industry standards.\n5. Continual improvement in product price and performance characteristics.\n6. Rapid adoption of technological advancements by competitors.\n7. Price sensitivity on the part of consumers and businesses.\nThese factors contribute to the competitive landscape that the Company must navigate to succeed.",
-      "latency_s": 3.87,
+      "ai_response": "The highly competitive global markets in which the Company's products and services are offered are characterized by aggressive price competition, downward pressure on gross margins, continual improvement in product performance, and price sensitivity on the part of consumers and businesses. Additionally, these markets feature frequent introduction of new products and services, short product life cycles, evolving industry standards, and rapid adoption of technological advancements.",
+      "latency_s": 6.87,
       "answer_relevance": 1.0,
       "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately lists the specific characteristics of highly competitive global markets as outlined in the ground truth."
+      "judge_reason": "The AI response accurately captures all the key characteristics outlined in the ground truth regarding the competitive global markets."
     },
     {
       "question": "Based on the provided text, explain how the Company's comprehensive product development approach contributes to its financial risks and competitive challenges.",
       "ground_truth": "The Company designs and develops nearly the entire solution for its products, including the hardware, operating system, numerous software applications, and related services. This comprehensive approach necessitates significant investments in R&D. However, there is no assurance these investments will achieve expected returns, and the Company may not be able to successfully develop and market new products and services, which contributes to financial risks and competitive challenges.",
-      "ai_response": "The Company's comprehensive product development approach contributes to its financial risks and competitive challenges in several ways. Firstly, the need to continually introduce new products, services, and technologies is essential to remain competitive and stimulate customer demand. This requirement creates financial risks as the Company must manage the costs associated with research and development, production ramp-up, and market acceptance of these new offerings.\nAdditionally, the Company faces challenges related to the effective management of purchase commitments and inventory levels, which must align with anticipated product demand. If the Company fails to accurately predict demand or manage inventory effectively, it could lead to excess inventory or stockouts, both of which can adversely impact financial performance.\nMoreover, the risks associated with new technologies and potential quality issues or defects in new products can further complicate the Company's financial stability. If new products do not meet market expectations or if there are significant defects, it could result in lower revenues and profit margins, thereby affecting the overall financial condition of the Company.\nIn summary, while the comprehensive product development approach is crucial for maintaining competitiveness, it inherently involves significant financial risks and challenges that the Company must navigate to ensure successful outcomes.",
-      "latency_s": 13.72,
-      "answer_relevance": 0.9,
-      "faithfulness": 0.8,
-      "judge_reason": "The AI response addresses the question well by discussing financial risks and competitive challenges, but it introduces additional details not explicitly mentioned in the ground truth, affecting its faithfulness."
+      "ai_response": "The Company's comprehensive product development approach is critical in navigating financial risks and competitive challenges due to the highly volatile and competitive nature of its markets. The success of new product and service introductions hinges on several factors, including timely development, market acceptance, and the management of production ramp-up issues. Additionally, the Company faces risks related to the availability and performance of application software, effective management of inventory levels, and potential quality issues with new offerings. These factors collectively influence the Company's ability to maintain its competitive edge and financial stability, as there is no assurance that it will continue to provide products and services that effectively compete in the market.",
+      "latency_s": 7.25,
+      "answer_relevance": 0.8,
+      "faithfulness": 0.9,
+      "judge_reason": "The AI response addresses the financial risks and competitive challenges related to the Company's comprehensive product development approach, but it introduces additional factors not explicitly mentioned in the ground truth."
     },
     {
       "question": "Excluding those with 'U.S.' in their jurisdiction name, how many distinct countries or territories are represented as jurisdictions of incorporation for the listed subsidiaries?",
       "ground_truth": "There are 11 distinct countries or territories represented as jurisdictions of incorporation for the listed subsidiaries, excluding those with 'U.S.' in their jurisdiction name: Hong Kong, Canada, China, Ireland, India, Japan, South Korea, Mexico, Australia, Thailand, and Vietnam.",
-      "ai_response": "Excluding those with 'U.S.' in their jurisdiction name, the distinct countries or territories represented as jurisdictions of incorporation for the listed subsidiaries are:\n1. Hong Kong\n2. Canada\n3. China\n4. Ireland\n5. India\n6. Japan\n7. South Korea\n8. Mexico\n9. Australia\n10. Thailand\n11. Vietnam\n12. Singapore\nThis results in a total of 12 distinct countries or territories.",
-      "latency_s": 4.69,
-      "answer_relevance": 0.8,
+      "ai_response": "The sources do not provide specific information regarding the distinct countries or territories represented as jurisdictions of incorporation for the listed subsidiaries.",
+      "latency_s": 5.3,
+      "answer_relevance": 0.0,
       "faithfulness": 0.0,
-      "judge_reason": "The AI response incorrectly includes Singapore, resulting in an inaccurate total of 12 distinct countries instead of the correct 11."
+      "judge_reason": "The AI response does not answer the question and lacks any factual information related to the ground truth."
     },
     {
       "question": "Based on the footnote, what is the primary reason for the omission of certain subsidiaries from this exhibit, and what specific regulatory item governs this disclosure requirement?",
       "ground_truth": "The primary reason for the omission of certain subsidiaries is that, when considered in the aggregate, they would not constitute a significant subsidiary as of the end of the year covered by the report. This disclosure requirement is governed by Item 601(b)(21)(ii) of Regulation S-K.",
-      "ai_response": "The primary reason for the omission of certain subsidiaries from this exhibit is that the required information is not applicable or is not present in amounts sufficient to require submission of the schedule, or because the information required is included in the consolidated financial statements and accompanying notes included in this Form 10-K. The specific regulatory item that governs this disclosure requirement is Item 601(b)(4)(iii) of Regulation S-K.",
-      "latency_s": 3.37,
-      "answer_relevance": 0.5,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not accurately address the primary reason for the omission or the correct regulatory item, leading to a significant deviation from the ground truth."
+      "ai_response": "The primary reason for the omission of certain subsidiaries from the exhibit is that, when considered in the aggregate, they do not constitute a significant subsidiary as of the end of the year covered by the report. This disclosure requirement is governed by Item 601(b)(21)(ii) of Regulation S-K.",
+      "latency_s": 5.88,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "judge_reason": "The AI response accurately reflects the primary reason for the omission of subsidiaries and correctly cites the regulatory item governing the disclosure requirement, matching the ground truth."
     },
     {
       "question": "According to the 'Insider Trading Arrangements' section, what is the latest expiration date for any of the described trading plans, and which individual's plan has this expiration date?",
       "ground_truth": "The latest expiration date for a described trading plan is December 31, 2026, which belongs to Deirdre O\u2019Brien\u2019s plan.",
-      "ai_response": "The latest expiration date for any of the described trading plans is December 31, 2026. This expiration date belongs to Deirdre O\u2019Brien, the Company\u2019s Senior Vice President, Retail.",
-      "latency_s": 3.11,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately provides the latest expiration date and correctly identifies Deirdre O\u2019Brien as the individual associated with that date."
+      "ai_response": "The sources do not provide information regarding the latest expiration date for any of the described trading plans or which individual's plan has this expiration date.",
+      "latency_s": 5.25,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not answer the question and contradicts the ground truth by stating that no information is provided."
     },
     {
       "question": "Based on the details provided for the insider trading arrangements, identify two distinct differences between the trading plan entered into by Deirdre O\u2019Brien and the plan entered into by Jeff Williams, excluding their entry dates and job titles.",
       "ground_truth": "Two distinct differences are:\n1.  **Shares Covered**: Deirdre O\u2019Brien\u2019s plan provides for the sale of shares vesting between April 1, 2025, and October 1, 2026, pursuant to certain equity awards. Jeff Williams\u2019 plan provides for the sale of up to 100,000 shares of common stock, as well as shares vesting between April 1, 2025, and October 1, 2025, pursuant to certain equity awards.\n2.  **Plan Expiration Date**: Deirdre O\u2019Brien\u2019s plan will expire on December 31, 2026. Jeff Williams\u2019 plan will expire on December 15, 2025.",
-      "ai_response": "The two distinct differences between the trading plan entered into by Deirdre O\u2019Brien and the plan entered into by Jeff Williams are:\n1. **Expiration Dates**: Deirdre O\u2019Brien\u2019s trading plan will expire on October 15, 2024, while Jeff Williams\u2019 plan will expire on December 15, 2024.\n2. **Conditions of Sale**: Deirdre O\u2019Brien\u2019s plan provides for the sale of all shares vested during the duration of the plan, whereas the specifics of Jeff Williams' plan regarding the conditions of sale are not detailed in the provided sources.",
-      "latency_s": 4.26,
+      "ai_response": "The trading plan entered into by Jeff Williams allows for the sale of up to 100,000 shares of common stock and includes shares vesting between April 1, 2025, and October 1, 2025, while the details of Deirdre O\u2019Brien's trading plan are not provided in the sources. Additionally, Williams' plan specifies an expiration date of December 15, 2025, which is not mentioned for O\u2019Brien's plan.",
+      "latency_s": 7.48,
       "answer_relevance": 0.5,
-      "faithfulness": 0.0,
-      "judge_reason": "The AI response does not accurately reflect the differences stated in the ground truth, particularly regarding expiration dates and conditions of sale."
+      "faithfulness": 0.5,
+      "judge_reason": "The AI response partially addresses the question by mentioning Jeff Williams' plan but fails to provide specific details about Deirdre O\u2019Brien's plan, leading to incomplete and inaccurate comparisons."
     },
     {
       "question": "What are the minimum principal amount and the integral multiple in excess thereof for certificated 3.050% 2029 Notes and the 2042 Notes?",
       "ground_truth": "For certificated 3.050% 2029 Notes and the 2042 Notes, the minimum denomination is \u00a3100,000 principal amount and integral multiples of \u00a31,000 in excess thereof.",
-      "ai_response": "The minimum principal amount for certificated 3.050% 2029 Notes is \u00a3100,000, and the integral multiple in excess thereof is \u00a31,000. The same applies to the 2042 Notes.",
-      "latency_s": 3.89,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately reflects the information provided in the ground truth regarding the minimum principal amount and integral multiples for both the 2029 and 2042 Notes."
+      "ai_response": "The minimum principal amount for the certificated 3.050% 2029 Notes is $2,000,000, and the integral multiple in excess thereof is $1,000,000. The sources do not provide information regarding the 2042 Notes.",
+      "latency_s": 5.75,
+      "answer_relevance": 0.5,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response provides incorrect principal amounts and does not address the 2042 Notes, deviating significantly from the ground truth."
     },
     {
       "question": "The Notes are generally issued in book-entry form and represented by global notes. According to the text, under what specific conditions can these global notes be exchanged for certificated notes in definitive form?",
       "ground_truth": "The Notes represented by global notes are exchangeable for certificated notes in definitive form if: 1) the common depositary notifies the issuer that it is unwilling or unable to continue as depositary or ceases to be eligible under the applicable Indenture, and the issuer does not appoint a successor depository within 90 days; or 2) the issuer determines that the Notes will no longer be represented by global securities and executes and delivers an order to that effect to the trustee.",
-      "ai_response": "The global notes can be exchanged for certificated notes in definitive form under certain conditions, specifically if: \n1. The common depositary notifies that it is unwilling or unable to continue as depositary.\n2. The common depositary ceases to be eligible under the applicable Indenture and the issuer does not appoint a successor depository within 90 days.\nThis information is found in the sources provided.",
-      "latency_s": 3.71,
-      "answer_relevance": 0.8,
-      "faithfulness": 0.9,
-      "judge_reason": "The AI response partially answers the question but omits the second condition regarding the issuer's determination and order to the trustee, affecting its completeness."
+      "ai_response": "The global notes can be exchanged for certificated notes in definitive form if the issuer determines that the Notes will no longer be represented by global securities and executes and delivers to the trustee an order to that effect.",
+      "latency_s": 5.78,
+      "answer_relevance": 0.5,
+      "faithfulness": 0.5,
+      "judge_reason": "The AI response partially answers the question by mentioning one condition for exchanging global notes but omits the second condition provided in the ground truth."
     },
     {
       "question": "For hedged items in fair value hedges, what was the decrease in the carrying amount of current and non-current marketable securities from September 25, 2021, to September 24, 2022?",
       "ground_truth": "The carrying amount of current and non-current marketable securities decreased by $2,576 million, from $15,954 million on September 25, 2021, to $13,378 million on September 24, 2022.",
-      "ai_response": "The carrying amount of current and non-current marketable securities as of September 25, 2021, was $15,954 million, and as of September 24, 2022, it was $13,378 million. The decrease in the carrying amount is calculated as follows:\n$15,954 million (2021) - $13,378 million (2022) = $2,576 million.\nTherefore, the decrease in the carrying amount of current and non-current marketable securities from September 25, 2021, to September 24, 2022, was $2,576 million.",
-      "latency_s": 4.42,
-      "answer_relevance": 1.0,
-      "faithfulness": 1.0,
-      "judge_reason": "The AI response accurately answers the question and matches the ground truth in both the figures and the calculation."
+      "ai_response": "The carrying amount of current and non-current marketable securities in fair value hedges decreased from $1,000 million as of September 25, 2021, to $800 million as of September 24, 2022, reflecting a decrease of $200 million.",
+      "latency_s": 6.01,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "judge_reason": "The AI response does not answer the question correctly and provides incorrect figures that do not match the ground truth."
     },
     {
       "question": "Describe the different strategies the Company employs to mitigate credit risk, distinguishing between its derivative contracts and its trade receivables.",
       "ground_truth": "For derivative contracts, the Company mitigates credit risk by generally entering into collateral security arrangements that provide for collateral to be received or posted when net fair values fluctuate, and by using master netting arrangements to settle transactions with a single net amount. For trade receivables, the Company generally does not require collateral from customers but will require it or third-party credit support in certain instances. Additionally, it attempts to limit credit risk with credit insurance for certain customers or by requiring third-party financing, loans, or leases, noting that it generally does not assume recourse or credit risk sharing for these third-party arrangements.",
-      "ai_response": "The Company employs several strategies to mitigate credit risk, which can be distinguished between its derivative contracts and its trade receivables.\n1. **Derivative Contracts**: \n   - The Company uses collateral security arrangements that allow for collateral to be received or posted when the net fair values of certain derivatives fluctuate from contractually established thresholds. \n   - Additionally, the Company enters into master netting arrangements with counterparties, which permit the settlement of transactions with a single net amount payable by one party to the other. \n2. **Trade Receivables**: \n   - A substantial majority of the Company\u2019s outstanding trade receivables are not covered by collateral, third-party bank support, financing arrangements, or credit insurance. \n   - The Company\u2019s exposure to credit and collectibility risk on its trade receivables is heightened in certain international markets, indicating that its ability to mitigate such risks may be limited.\nThese strategies highlight the Company's proactive approach to managing credit risk in both derivative transactions and trade receivables.",
-      "latency_s": 6.77,
-      "answer_relevance": 0.9,
+      "ai_response": "The Company employs several strategies to mitigate credit risk associated with its derivative contracts and trade receivables. For derivative contracts, it uses collateral security arrangements and master netting arrangements, allowing for net settlement of transactions and reducing gross credit exposure. In contrast, for trade receivables, a substantial majority are not covered by collateral or credit insurance, leading to higher exposure to credit and collectibility risk, particularly in certain international markets. The Company also has unsecured vendor non-trade receivables from outsourcing partners and vendors.",
+      "latency_s": 7.62,
+      "answer_relevance": 0.8,
       "faithfulness": 0.9,
-      "judge_reason": "The AI response accurately describes the strategies for mitigating credit risk for both derivative contracts and trade receivables, closely aligning with the ground truth, though it lacks some specific details regarding collateral and credit support for trade receivables."
+      "judge_reason": "The AI response addresses the strategies for mitigating credit risk for both derivative contracts and trade receivables, but it lacks some specific details from the ground truth regarding collateral requirements and credit support for trade receivables."
     }
   ]
 }
