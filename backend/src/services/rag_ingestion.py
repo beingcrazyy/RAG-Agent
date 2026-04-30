@@ -96,10 +96,26 @@ def process_document(db: Session, document_id: str):
 
             # Extract native page bounds from PyPDF loader standard mapping
             page_no = chunk.metadata.get('page', 0)
+            # Detect company name from filename for metadata filtering
+            fname_lower = doc.name.lower()
+            if "google" in fname_lower or "alphabet" in fname_lower:
+                company = "Google"
+            elif "microsoft" in fname_lower:
+                company = "Microsoft"
+            elif "rich-dad" in fname_lower or "richdad" in fname_lower:
+                company = "Rich Dad"
+            elif "adbe" in fname_lower or "adobe" in fname_lower:
+                company = "Adobe"
+            elif "10-k" in fname_lower or "10-q" in fname_lower:
+                company = "Apple"
+            else:
+                company = "Unknown"
+
             enhanced_metadata = {
                 "source": doc.name,
                 "page": page_no,
-                "agentic_type": doc_type
+                "agentic_type": doc_type,
+                "company": company
             }
 
             db_chunk = DocumentChunk(

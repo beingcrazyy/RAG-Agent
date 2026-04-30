@@ -39,6 +39,7 @@ class AgentState(TypedDict):
     context: str
     db: Session
 
+
 def retrieve_context(state: AgentState) -> dict:
     """
     Per-document fair sampling retrieval:
@@ -70,15 +71,18 @@ def retrieve_context(state: AgentState) -> dict:
     # Get top CHUNKS_PER_DOC best chunks from every document individually.
     # This gives a 5-page resume equal footing with a 300-page annual report.
     from src.models.document import Document
-    CHUNKS_PER_DOC = 15
+    CHUNKS_PER_DOC = 20
 
     docs_in_workspace = db.query(Document).filter(
         Document.workspace_id == workspace_id,
         Document.status == "READY"
     ).all()
 
+    target_docs = docs_in_workspace
+    print(f"Retrieving from {len(target_docs)} docs")
+
     all_candidates = []
-    for doc in docs_in_workspace:
+    for doc in target_docs:
         doc_chunks = (
             db.query(DocumentChunk)
             .filter(DocumentChunk.document_id == doc.id)
@@ -107,8 +111,8 @@ def retrieve_context(state: AgentState) -> dict:
     rerankreq = RerankRequest(query=query, passages=passages)
     reranked = ranker.rerank(rerankreq)
 
-    # 4. Take top-12 after reranking
-    top_docs = reranked[:12]
+    # 4. Take top-15 after reranking for better recall
+    top_docs = reranked[:15]
 
     context_text = "\n\n".join([
         f"Source: {d['meta']['source']} (Page {int(d['meta']['page']) + 1}) | Text: {d['text']}"

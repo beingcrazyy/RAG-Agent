@@ -165,16 +165,18 @@ def chat_with_rag(
         yield b"[SYS:FOUND]|"
 
         # Build a numbered context block so the LLM can reference sources by index
+        # Each source gets ALL its retrieved text concatenated (not just first match)
         numbered_lines = []
         for i, src in enumerate(sources, start=1):
-            # Extract just the text from context_str matching this source
-            # context_str format: "Source: X (Page N) | Text: ..."
-            for block in context_str.split("\n\n"):
-                src_base = src.split(" \u2022 ")[0]  # e.g. "resume.pdf"
-                if src_base in block:
-                    text_part = block.split("| Text:")[-1].strip() if "| Text:" in block else block
-                    numbered_lines.append(f"[{i}] {src_base}: {text_part[:2000]}")
-                    break
+            src_base = src.split(" \u2022 ")[0]  # e.g. "resume.pdf"
+            blocks_for_src = [
+                block.split("| Text:")[-1].strip() if "| Text:" in block else block
+                for block in context_str.split("\n\n")
+                if src_base in block
+            ]
+            combined_text = " [...] ".join(blocks_for_src)[:3000]
+            if combined_text:
+                numbered_lines.append(f"[{i}] {src_base}: {combined_text}")
 
         numbered_context = "\n".join(numbered_lines) if numbered_lines else context_str
 
@@ -182,6 +184,12 @@ def chat_with_rag(
         system_prompt = (
             "You are an intelligent document assistant. Answer the question using ONLY the numbered sources below.\n"
             "If the sources don't contain the answer, say so clearly.\n"
+            "CRITICAL RULES:\n"
+            "1. Pay close attention to specific dates, fiscal periods, and time references in the question. "
+            "Only use figures from the EXACT date or period asked — never substitute data from a different date.\n"
+            "2. Each source is labeled with its filename. If the question asks about a specific company, "
+            "use ONLY sources from that company's document. Ignore data from other companies' documents.\n"
+            "3. Do not use your training knowledge — answer strictly from the sources provided.\n"
             "At the very END of your complete answer, on a new line, output exactly:\n"
             "[[USED:comma-separated-source-numbers-you-actually-used]] or [[USED:NONE]] if none helped.\n"
             "Example: [[USED:1,3]]\n\n"
@@ -189,7 +197,7 @@ def chat_with_rag(
             f"Question: {payload.message}\n\nAnswer:"
         )
 
-        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.1, streaming=True)
+        llm = ChatOpenAI(model="gpt-4o", temperature=0.0, streaming=True)
         
         full_response = ""
         try:
