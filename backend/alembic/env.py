@@ -11,6 +11,7 @@ from src.db.base import Base
 import src.models.workspace
 import src.models.document
 import src.models.chat
+import src.models.enterprise
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)

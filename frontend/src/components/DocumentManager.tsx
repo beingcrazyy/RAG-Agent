@@ -2,139 +2,74 @@
 
 import React, { useState } from 'react';
 import { FolderIcon, DocumentTextIcon, CloudArrowUpIcon, MagnifyingGlassIcon, TrashIcon } from '@heroicons/react/24/solid';
+import type { AuthUser } from '../app/page';
 
-export default function DocumentManager() {
+export default function DocumentManager({ user }: { user: AuthUser }) {
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const authHeader = { "Authorization": `Bearer ${user?.access_token}` };
+  const workspaceId = user?.workspace_id;
+  const isAdmin = user?.role === 'admin';
+
   const [searchQuery, setSearchQuery] = useState('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [dynamicDocs, setDynamicDocs] = useState<any[]>([]);
-
-  // Tab State
   const [activeTab, setActiveTab] = useState<string>('All Documents');
+
+  const categorize = (name: string) => {
+    const raw = name.toLowerCase();
+    if (raw.endsWith('.pdf')) return 'PDF Documents';
+    if (raw.endsWith('.jpg') || raw.endsWith('.jpeg') || raw.endsWith('.png') || raw.endsWith('.svg')) return 'Image Assets';
+    if (raw.endsWith('.xls') || raw.endsWith('.xlsx') || raw.endsWith('.csv')) return 'Spreadsheets';
+    if (raw.endsWith('.doc') || raw.endsWith('.docx') || raw.endsWith('.txt')) return 'Text Documents';
+    return 'Other Formats';
+  };
 
   const handleDeleteDocument = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     try {
-      await fetch(`${apiBase}/api/v1/documents/${id}`, {
-        method: "DELETE",
-        headers: { "Authorization": "Bearer mock-token" }
-      });
+      await fetch(`${apiBase}/api/v1/documents/${id}`, { method: "DELETE", headers: authHeader });
       setDynamicDocs(prev => prev.filter(d => d.id !== id));
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
   };
 
   React.useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    fetch(`${apiBase}/api/v1/documents/`, {
-      headers: { "Authorization": "Bearer mock-token" }
-    })
-    .then(res => res.json())
-    .then(data => {
-      // Map strictly by true extensions
-      const categorized = data.map((d: any) => {
-        let cat = 'Other Formats';
-        const raw = d.name.toLowerCase();
-        
-        if (raw.endsWith('.pdf')) cat = 'PDF Documents';
-        else if (raw.endsWith('.jpg') || raw.endsWith('.jpeg') || raw.endsWith('.png') || raw.endsWith('.svg')) cat = 'Image Assets';
-        else if (raw.endsWith('.xls') || raw.endsWith('.xlsx') || raw.endsWith('.csv')) cat = 'Spreadsheets';
-        else if (raw.endsWith('.doc') || raw.endsWith('.docx') || raw.endsWith('.txt')) cat = 'Text Documents';
-
-        return { ...d, category: cat };
-      });
-      setDynamicDocs(categorized);
-    })
-    .catch(err => console.error(err));
-  }, []);
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
+    if (!workspaceId) return;
+    fetch(`${apiBase}/api/v1/documents/?workspace_id=${workspaceId}`, { headers: authHeader })
+      .then(res => res.json())
+      .then(data => setDynamicDocs((Array.isArray(data) ? data : []).map((d: any) => ({ ...d, category: categorize(d.name) }))))
+      .catch(err => console.error(err));
+  }, [workspaceId]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      alert("Please upload standard .pdf files for the initial test phase!");
-      return;
-    }
+    if (!file || !workspaceId) return;
+    if (file.type !== "application/pdf") { alert("Please upload .pdf files only!"); return; }
 
     setIsUploading(true);
-    const mockWs = "00000000-0000-0000-0000-000000000000";
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
     try {
-      const createRes = await fetch(`${apiBase}/api/v1/documents/`, {
+      const formData = new FormData();
+      formData.append('workspace_id', workspaceId);
+      formData.append('file', file);
+
+      const res = await fetch(`${apiBase}/api/v1/documents/upload`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer mock-token"
-        },
-        body: JSON.stringify({ workspace_id: mockWs, filename: file.name })
+        headers: authHeader,
+        body: formData,
       });
-      const docData = await createRes.json();
-      const docId = docData.id;
-
-      let targetCat = 'Other Formats';
-      const raw = file.name.toLowerCase();
-      if (raw.endsWith('.pdf')) targetCat = 'PDF Documents';
-      else if (raw.endsWith('.jpg') || raw.endsWith('.jpeg') || raw.endsWith('.png') || raw.endsWith('.svg')) targetCat = 'Image Assets';
-      else if (raw.endsWith('.xls') || raw.endsWith('.xlsx') || raw.endsWith('.csv')) targetCat = 'Spreadsheets';
-      else if (raw.endsWith('.doc') || raw.endsWith('.docx') || raw.endsWith('.txt')) targetCat = 'Text Documents';
-
-      setDynamicDocs(prev => [{
-        id: docId,
-        name: file.name,
-        size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
-        status: "UPLOADING",
-        category: targetCat
-      }, ...prev]);
-
-      const urlRes = await fetch(`${apiBase}/api/v1/documents/${docId}/upload-url`, {
-        headers: { "Authorization": "Bearer mock-token" }
-      });
-      const urlData = await urlRes.json();
-      let uploadUrl = urlData.upload_url;
-
-      if (uploadUrl.includes("gcs-emulator")) {
-        uploadUrl = uploadUrl.replace("gcs-emulator:4443", "localhost:4443");
-      }
-
-      const method = uploadUrl.includes("uploadType=media") ? "POST" : "PUT";
-      await fetch(uploadUrl, {
-        method: method,
-        body: file,
-        headers: { "Content-Type": file.type }
-      });
-
-      setDynamicDocs(prev => prev.map(d => d.id === docId ? { ...d, status: "PROCESSING" } : d));
-      await fetch(`${apiBase}/api/v1/documents/${docId}/process`, {
-        method: "POST",
-        headers: { "Authorization": "Bearer mock-token" }
-      });
-
-      setTimeout(() => {
-        setDynamicDocs(prev => prev.map(d => d.id === docId ? { ...d, status: "READY" } : d));
-      }, 3000);
-
+      if (!res.ok) { const e = await res.json(); alert(e.detail || 'Upload failed'); return; }
+      const docData = await res.json();
+      setDynamicDocs(prev => [{ ...docData, category: categorize(docData.name) }, ...prev]);
     } catch (err: any) {
-      alert("Upload failed! " + err.message);
-      setDynamicDocs(prev => prev.filter(d => d.name !== file.name));
+      alert("Upload failed: " + err.message);
     } finally {
       setIsUploading(false);
       e.target.value = "";
     }
   };
 
-  // Derive Tabs (All + Active dynamic categories found in docs)
   const availableCategories = Array.from(new Set(dynamicDocs.map(d => d.category)));
   const tabs = ['All Documents', ...availableCategories.sort()];
-
-  // Filter Logic: Active Tab AND Search Query
   const filteredDocs = dynamicDocs.filter(doc => {
     const matchesTab = activeTab === 'All Documents' || doc.category === activeTab;
     const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -143,41 +78,38 @@ export default function DocumentManager() {
 
   return (
     <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#0a0a0a] transition-colors overflow-hidden">
-      
-      {/* Header View */}
+
+      {/* Header */}
       <div className="px-10 py-10 border-b border-slate-200 dark:border-slate-800/50 bg-white dark:bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-3">
-               <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
+              <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
             </h2>
-            <p className="text-slate-500 mt-2">Manage the foundational document arrays your Workspace AI relies on.</p>
+            <p className="text-slate-500 mt-2">
+              {isAdmin ? 'Manage documents that power your enterprise AI.' : 'Documents available in your workspace.'}
+            </p>
           </div>
-          
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            className="hidden" 
-            accept="application/pdf"
-          />
-          <button 
-            onClick={handleUploadClick}
-            disabled={isUploading}
-            className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 px-6 font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-50"
-          >
-            <CloudArrowUpIcon className={`w-6 h-6 ${isUploading ? "animate-pulse" : ""}`} />
-            <span>{isUploading ? "Uploading..." : "Upload Document"}</span>
-          </button>
+
+          {isAdmin && (
+            <>
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="application/pdf" />
+              <button onClick={() => fileInputRef.current?.click()} disabled={isUploading}
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 px-6 font-semibold transition-all shadow-md disabled:opacity-50">
+                <CloudArrowUpIcon className={`w-6 h-6 ${isUploading ? "animate-pulse" : ""}`} />
+                {isUploading ? "Uploading…" : "Upload Document"}
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-10">
         <div className="max-w-6xl mx-auto flex flex-col h-full">
-          
-          {/* Top Controls: Tabs and Search */}
+
+          {/* Tabs and Search */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 dark:border-slate-800/50 pb-4">
-            
+
             {/* Horizontal Tabs */}
             <div className="flex items-center overflow-x-auto gap-2 pb-2 md:pb-0 hide-scrollbar pt-2">
                {tabs.map((tab) => (
@@ -224,7 +156,8 @@ export default function DocumentManager() {
                         </div>
                         <button 
                           onClick={(e) => handleDeleteDocument(e, doc.id)}
-                          className="text-slate-300 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] p-1.5 rounded-lg transition-all"
+                          className={`text-slate-300 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] p-1.5 rounded-lg transition-all ${!isAdmin ? 'invisible' : ''}`}
+                          disabled={!isAdmin}
                         >
                           <TrashIcon className="w-4 h-4" />
                         </button>

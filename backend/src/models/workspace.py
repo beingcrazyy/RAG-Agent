@@ -6,11 +6,14 @@ from sqlalchemy.dialects.postgresql import UUID
 from src.db.base import Base
 
 class User(Base):
-    id = Column(String, primary_key=True, index=True) # Firebase UID
+    id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
+    name = Column(String, nullable=True)
+    hashed_password = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     workspaces = relationship("Workspace", back_populates="user")
+    enterprise_memberships = relationship("EnterpriseUser", back_populates="user")
 
 class Workspace(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)

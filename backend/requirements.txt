@@ -18,3 +18,4 @@ slowapi>=0.1.9
 python-multipart>=0.0.9
 python-dotenv>=1.0.0
 pymupdf4llm>=0.0.17
+passlib[bcrypt]>=1.7.4

@@ -2,7 +2,7 @@ import io
 from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from src.db.session import get_db
-from src.core.security import get_current_user
+from src.core.security import get_current_user, get_token_payload
 from src.models.workspace import User, Workspace
 from src.models.document import Document
 from src.services.storage import upload_file
@@ -12,23 +12,27 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
-class DocumentCreate(BaseModel):
-    workspace_id: str
-    filename: str
+def _resolve_workspace(token_payload: dict, db: Session) -> Workspace:
+    """Returns the enterprise workspace from the JWT — shared across all members."""
+    workspace_id = token_payload.get("workspace_id")
+    if not workspace_id:
+        raise HTTPException(status_code=403, detail="No workspace in token")
+    workspace = db.query(Workspace).filter(Workspace.id == workspace_id).first()
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    return workspace
 
 
 @router.get("/")
 def get_documents_for_workspace(
     workspace_id: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
 ):
-    # Enforce ownership — user can only query their own workspaces
-    workspace = db.query(Workspace).filter(
-        Workspace.id == workspace_id,
-        Workspace.user_id == current_user.id
-    ).first()
-    if not workspace:
+    # Any active member can list docs — workspace must match their enterprise workspace
+    token_ws = token_payload.get("workspace_id")
+    if token_ws and str(workspace_id) != str(token_ws):
         raise HTTPException(status_code=403, detail="Access denied")
 
     docs = db.query(Document).filter(
@@ -47,17 +51,17 @@ async def upload_document(
     file: UploadFile = File(...),
     background_tasks: BackgroundTasks = BackgroundTasks(),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
 ):
-    """Single-step upload: receive file, persist to disk, queue processing."""
-    workspace = db.query(Workspace).filter(
-        Workspace.id == workspace_id,
-        Workspace.user_id == current_user.id
-    ).first()
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
+    """Only enterprise admins can upload documents."""
+    if token_payload.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Only enterprise admins can upload documents")
 
-    # Create DB record
+    workspace = _resolve_workspace(token_payload, db)
+    if str(workspace.id) != str(workspace_id):
+        raise HTTPException(status_code=403, detail="Workspace mismatch")
+
     doc = Document(
         workspace_id=workspace.id,
         name=file.filename,
@@ -67,11 +71,8 @@ async def upload_document(
     db.commit()
     db.refresh(doc)
 
-    # Write bytes to persistent volume
     file_bytes = await file.read()
     upload_file(str(workspace.id), str(doc.id), file.filename, file_bytes)
-
-    # Queue background ingestion
     background_tasks.add_task(process_document, db, str(doc.id))
 
     return {"id": str(doc.id), "name": doc.name, "status": doc.status}
@@ -81,20 +82,23 @@ async def upload_document(
 def delete_document(
     document_id: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
 ):
+    """Only enterprise admins can delete documents."""
+    if token_payload.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Only enterprise admins can delete documents")
+
     doc = db.query(Document).filter(Document.id == document_id).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
-    # Verify ownership
-    workspace = db.query(Workspace).filter(
-        Workspace.id == doc.workspace_id,
-        Workspace.user_id == current_user.id
-    ).first()
-    if not workspace:
+    # Verify the doc belongs to the enterprise's workspace
+    token_ws = token_payload.get("workspace_id")
+    if token_ws and str(doc.workspace_id) != str(token_ws):
         raise HTTPException(status_code=403, detail="Access denied")
 
     db.delete(doc)
     db.commit()
     return {"status": "deleted"}
+

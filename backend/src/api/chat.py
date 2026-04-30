@@ -3,12 +3,14 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 from sqlalchemy.orm import Session
 from src.db.session import get_db
-from src.core.security import get_current_user
+from src.core.security import get_current_user, get_token_payload
 from src.models.workspace import User, Workspace
 from src.models.chat import ChatThread, ChatMessage
+from src.models.enterprise import Enterprise, QueryLog, TokenUsageLog
 from src.services.langgraph_orchestrator import rag_chain
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
+import uuid as _uuid
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
@@ -90,16 +92,21 @@ def chat_with_rag(
     request: Request,
     payload: ChatRequest,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
 ):
-    # Verify workspace ownership
-    workspace = db.query(Workspace).filter(
-        Workspace.id == payload.workspace_id,
-        Workspace.user_id == current_user.id
-    ).first()
-    
+    # Verify workspace matches the enterprise workspace in the JWT
+    token_ws = token_payload.get("workspace_id")
+    if token_ws and str(payload.workspace_id) != str(token_ws):
+        raise HTTPException(status_code=403, detail="Workspace access denied")
+
+    workspace = db.query(Workspace).filter(Workspace.id == payload.workspace_id).first()
     if not workspace:
         raise HTTPException(status_code=404, detail="Workspace not found")
+
+    # Load enterprise for system_prompt and llm_model
+    enterprise_id = token_payload.get("enterprise_id")
+    enterprise = db.query(Enterprise).filter(Enterprise.id == enterprise_id).first() if enterprise_id else None
         
     thread = db.query(ChatThread).filter(ChatThread.id == payload.thread_id).first()
     
@@ -195,7 +202,12 @@ def chat_with_rag(
         numbered_context = "\n".join(numbered_lines) if numbered_lines else context_str
 
         # Instruct the LLM to cite by number — appended AFTER the answer
+        org_persona = ""
+        if enterprise and enterprise.system_prompt:
+            org_persona = f"ORGANISATION INSTRUCTIONS: {enterprise.system_prompt}\n"
+
         system_prompt = (
+            f"{org_persona}"
             "You are a precise document assistant. Answer using ONLY the numbered sources below.\n"
             "If the sources don't contain the answer, say so in one sentence.\n"
             "CRITICAL RULES:\n"
@@ -209,8 +221,10 @@ def chat_with_rag(
             f"Question: {payload.message}\n\nAnswer:"
         )
 
+        # Enterprise can pick from preset models; fall back to platform default
+        model_name = (enterprise.llm_model if enterprise and enterprise.llm_model else _az.AZURE_OPENAI_DEPLOYMENT)
         llm = AzureChatOpenAI(
-            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_deployment=model_name,
             azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
             api_key=_az.AZURE_OPENAI_API_KEY,
             api_version=_az.AZURE_OPENAI_API_VERSION,
@@ -256,6 +270,27 @@ def chat_with_rag(
         clean_stored = re.sub(r'\s*\[\[USED:.*?\]\]', '', full_response).strip()
         sys_msg = ChatMessage(thread_id=thread.id, role="assistant", content=clean_stored)
         db.add(sys_msg)
+
+        # Log query + token usage for enterprise analytics
+        if enterprise_id:
+            try:
+                db.add(QueryLog(
+                    id=_uuid.uuid4(),
+                    enterprise_id=enterprise_id,
+                    user_id=current_user.id,
+                    query_text=payload.message[:500],
+                ))
+                db.add(TokenUsageLog(
+                    id=_uuid.uuid4(),
+                    enterprise_id=enterprise_id,
+                    user_id=current_user.id,
+                    tokens_in=len(numbered_context) // 4,
+                    tokens_out=len(clean_stored) // 4,
+                    model=model_name,
+                ))
+            except Exception:
+                pass  # never let logging break the chat response
+
         db.commit()
 
     from fastapi.responses import StreamingResponse
