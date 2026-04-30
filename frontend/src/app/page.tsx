@@ -139,7 +139,7 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
         <div className="w-full max-w-sm">
           {/* Header with title */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-[var(--color-light-text-primary)] dark:text-white mb-1">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
               {mode === 'login' ? 'Welcome back' : mode === 'register-enterprise' ? 'Create Enterprise' : 'Join an Enterprise'}
             </h2>
             <p className="text-slate-400 text-sm">
@@ -153,19 +153,19 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               {mode !== 'login' && (
                 <input required value={name} onChange={e => setName(e.target.value)} placeholder="Full name"
-                  className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                  className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
               )}
               <input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email address"
-                className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
               <input required type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"
-                className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
 
               {mode === 'register-enterprise' && (
                 <>
                   <input required value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company name"
-                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
                   <input value={domains} onChange={e => setDomains(e.target.value)} placeholder="Allowed email domains (e.g. acme.com, acme.org) — optional"
-                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
                 </>
               )}
 
@@ -173,13 +173,13 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
                 <>
                   {enterprises.length > 0 ? (
                     <select value={selectedSlug} onChange={e => setSelectedSlug(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white outline-none focus:ring-2 focus:ring-red-500/40">
+                      className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-red-500/40">
                       <option value="">— Select your company —</option>
                       {enterprises.map(e => <option key={e.slug} value={e.slug}>{e.name}</option>)}
                     </select>
                   ) : null}
                   <input value={inviteCode} onChange={e => setInviteCode(e.target.value)} placeholder="Or paste invite code"
-                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
+                    className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500/40" />
                 </>
               )}
 
@@ -217,7 +217,7 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-center">
               <button
                 onClick={() => { setMode('login'); setError(''); }}
-                className="text-sm font-semibold text-[var(--color-light-text-secondary)] dark:text-[var(--color-dark-text-secondary)] hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+                className="text-sm font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
               >
                 ← Back to Login
               </button>
@@ -234,7 +234,7 @@ function AuthScreen({ onLogin }: { onLogin: (u: AuthUser) => void }) {
 export default function RAGPlatformUI() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<AppView>('chat');
+  const [activeView, setActiveView] = useState<AppView>('home');
 
   useEffect(() => {
     const saved = localStorage.getItem('loomind_user');
