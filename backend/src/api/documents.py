@@ -45,6 +45,49 @@ def get_documents_for_workspace(
     ]
 
 
+@router.get("/suggestions")
+def get_workspace_suggestions(
+    workspace_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
+):
+    """Aggregate suggested questions + summaries across all READY documents in a workspace.
+    Used by the chat empty-state to show users what they can ask."""
+    token_ws = token_payload.get("workspace_id")
+    if token_ws and str(workspace_id) != str(token_ws):
+        raise HTTPException(status_code=403, detail="Access denied")
+
+    docs = db.query(Document).filter(
+        Document.workspace_id == workspace_id,
+        Document.status == "READY",
+    ).order_by(Document.created_at.desc()).limit(20).all()
+
+    summaries = []
+    questions: list[str] = []
+    seen = set()
+    for d in docs:
+        if d.summary:
+            summaries.append({"name": d.name, "summary": d.summary})
+        if d.suggested_questions and isinstance(d.suggested_questions, list):
+            for q in d.suggested_questions:
+                ql = q.strip()
+                if ql and ql.lower() not in seen:
+                    seen.add(ql.lower())
+                    questions.append(ql)
+                    if len(questions) >= 8:
+                        break
+        if len(questions) >= 8:
+            break
+
+    return {
+        "doc_count": len(docs),
+        "summaries": summaries[:10],
+        "questions": questions[:8],
+    }
+
+
+
 @router.post("/upload", status_code=201)
 async def upload_document(
     workspace_id: str = Form(...),

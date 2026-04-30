@@ -17,23 +17,14 @@ export default function HomeDashboard({ setActiveView, user }: { setActiveView: 
           <p className="text-slate-500 dark:text-slate-400 mt-2 text-lg">Welcome to <span className="font-semibold text-slate-700 dark:text-slate-300">{enterpriseName}</span>&apos;s knowledge base.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <button
             onClick={() => setActiveView('chat')}
             className="bg-red-600 hover:bg-red-500 text-white rounded-2xl p-6 text-left shadow-md transition-all group"
           >
             <ChatBubbleLeftRightIcon className="w-8 h-8 mb-3 opacity-90" />
             <p className="font-bold text-lg">Start a Chat</p>
-            <p className="text-red-100 text-sm mt-1">Ask questions across all your company documents.</p>
-          </button>
-
-          <button
-            onClick={() => setActiveView('documents')}
-            className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 text-left shadow-sm hover:shadow-md transition-all"
-          >
-            <DocumentTextIcon className="w-8 h-8 mb-3 text-blue-500" />
-            <p className="font-bold text-lg text-slate-900 dark:text-white">Browse Documents</p>
-            <p className="text-slate-400 text-sm mt-1">View all files uploaded to your workspace.</p>
+            <p className="text-red-100 text-sm mt-1">Ask questions across all your company documents — see suggestions inside chat.</p>
           </button>
         </div>
 

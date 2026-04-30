@@ -58,6 +58,17 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
   const [threadName, setThreadName] = useState<string>("New Chat");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitleValue, setEditTitleValue] = useState("");
+  const [suggestions, setSuggestions] = useState<{questions: string[]; summaries: {name:string;summary:string}[]; doc_count: number}>({questions:[], summaries:[], doc_count:0});
+  const [showSuggestions, setShowSuggestions] = useState(true);
+
+  // Fetch suggestions once on mount (workspace-level)
+  React.useEffect(() => {
+    if (!workspaceId) return;
+    fetch(`${apiBase}/api/v1/documents/suggestions?workspace_id=${workspaceId}`, { headers: authHeader })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setSuggestions(data); })
+      .catch(() => {});
+  }, [workspaceId]);
 
   const fetchActiveThreadName = () => {
     if (!activeThreadId || !workspaceId) return;
@@ -343,6 +354,39 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
               </div>
             </motion.div>
           ))}
+
+          {/* Suggestions block — only show on a fresh chat (only the welcome msg) */}
+          {messages.length <= 1 && showSuggestions && (suggestions.questions.length > 0 || suggestions.summaries.length > 0) && (
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="ml-10 space-y-5">
+              {suggestions.summaries.length > 0 && (
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-semibold mb-2">What you can ask about</p>
+                  <div className="space-y-1.5 text-[14px] text-slate-600 dark:text-slate-400">
+                    {suggestions.summaries.slice(0, 5).map((s, i) => (
+                      <p key={i}><span className="font-medium text-slate-700 dark:text-slate-300">·</span> {s.summary}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {suggestions.questions.length > 0 && (
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-semibold mb-2">Try one of these</p>
+                  <div className="flex flex-wrap gap-2">
+                    {suggestions.questions.map((q, i) => (
+                      <button
+                        key={i}
+                        onClick={() => { setInputValue(q); }}
+                        className="px-3.5 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111] text-[13px] text-slate-700 dark:text-slate-300 hover:border-red-400 dark:hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Typing indicator */}
           {isTyping && (

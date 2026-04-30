@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from sqlalchemy import Column, String, DateTime, ForeignKey, Integer, JSON
+from sqlalchemy import Column, String, DateTime, ForeignKey, Integer, JSON, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from pgvector.sqlalchemy import Vector
@@ -12,6 +12,8 @@ class Document(Base):
     name = Column(String, nullable=False)
     gcs_uri = Column(String, nullable=False)
     status = Column(String, default="PENDING") # PENDING, PROCESSING, READY, FAILED
+    summary = Column(Text, nullable=True)
+    suggested_questions = Column(JSON, nullable=True)  # list[str]
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     workspace = relationship("Workspace", back_populates="documents")

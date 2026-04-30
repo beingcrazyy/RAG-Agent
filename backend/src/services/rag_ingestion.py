@@ -150,7 +150,40 @@ def process_document(db: Session, document_id: str):
             db_chunks.append(db_chunk)
 
         db.add_all(db_chunks)
-        
+
+        # ── Generate document summary + suggested questions (one LLM call) ────
+        try:
+            summary_llm = AzureChatOpenAI(
+                azure_deployment=_az_settings.AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=_az_settings.AZURE_OPENAI_ENDPOINT,
+                api_key=_az_settings.AZURE_OPENAI_API_KEY,
+                api_version=_az_settings.AZURE_OPENAI_API_VERSION,
+                temperature=0.2,
+                max_tokens=400,
+            )
+            preview_text = " ".join([c.page_content for c in chunks[:8]])[:6000]
+            sq_prompt = (
+                "You are analyzing a document that will be added to a company knowledge base.\n"
+                "Return STRICT JSON with two fields:\n"
+                "  \"summary\": 1-2 sentence plain-English description of what this document is about.\n"
+                "  \"questions\": list of 4 short example questions a user might ask about it (max 9 words each).\n"
+                "No markdown, no code fences. Just JSON.\n\n"
+                f"Document name: {doc.name}\n"
+                f"Content preview:\n{preview_text}"
+            )
+            raw = summary_llm.invoke([HumanMessage(content=sq_prompt)]).content.strip()
+            # strip code fences if present
+            if raw.startswith("```"):
+                raw = raw.strip("`").lstrip("json").strip()
+            import json as _json
+            parsed = _json.loads(raw)
+            doc.summary = parsed.get("summary", "")[:600]
+            qs = parsed.get("questions", [])
+            if isinstance(qs, list):
+                doc.suggested_questions = [str(q)[:120] for q in qs[:6]]
+        except Exception as e:
+            logger.warning(f"Summary generation failed: {e}")
+
         doc.status = "READY"
         db.commit()
         logger.info(f"Successfully processed Document {doc.id}")

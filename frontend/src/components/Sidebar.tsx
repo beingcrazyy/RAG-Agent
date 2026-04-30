@@ -107,7 +107,8 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
           {!isCollapsed && <PlusIcon className="w-4 h-4 text-slate-400" />}
         </button>
 
-        {navItem('documents', <DocumentTextIcon className="w-5 h-5 shrink-0" />, 'Documents')}
+        {/* Documents nav: admins manage; members get suggestions inside chat */}
+        {isAdmin && navItem('documents', <DocumentTextIcon className="w-5 h-5 shrink-0" />, 'Documents')}
 
         {/* Admin-only nav items */}
         {isAdmin && navItem('users', <UserGroupIcon className="w-5 h-5 shrink-0" />, 'Users')}
