@@ -12,14 +12,20 @@ from dotenv import load_dotenv
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 load_dotenv(Path(__file__).resolve().parents[3] / ".env", override=True)
 
-from langchain_openai import ChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import HumanMessage
 
 API_BASE = os.environ.get("RAG_API_BASE", "http://localhost:8000/api/v1")
 DATASET_FILE = Path(__file__).parent / "eval_dataset.json"
 
-# OpenAI GPT-4o-mini as the Judge (much higher rate limits, cheaper than Gemini paid tier)
-judge_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
+# Azure OpenAI judge
+judge_llm = AzureChatOpenAI(
+    azure_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1-mini"),
+    azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
+    api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
+    api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
+    temperature=0.0,
+)
 
 EVAL_PROMPT = """
 You are an expert RAG evaluator. Grade the AI response against the ground truth.

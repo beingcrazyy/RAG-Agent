@@ -115,9 +115,16 @@ def chat_with_rag(
 
     if is_new:
         try:
-            from langchain_openai import ChatOpenAI
+            from langchain_openai import AzureChatOpenAI
             from langchain_core.messages import HumanMessage
-            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+            from src.core.config import settings as _az
+            llm = AzureChatOpenAI(
+                azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+                api_key=_az.AZURE_OPENAI_API_KEY,
+                api_version=_az.AZURE_OPENAI_API_VERSION,
+                temperature=0.3,
+            )
             ai_title_res = llm.invoke([
                 HumanMessage(content=f"Generate a strictly 2 to 4 word title summarizing this message: {payload.message}")
             ])
@@ -136,7 +143,8 @@ def chat_with_rag(
     # Manual retrieval block pulling LangGraph logic out of the execution layer
     from langchain_core.messages import HumanMessage
     from langchain_core.prompts import PromptTemplate
-    from langchain_openai import ChatOpenAI
+    from langchain_openai import AzureChatOpenAI
+    from src.core.config import settings as _az
     from src.services.langgraph_orchestrator import retrieve_context
     from src.models.document import Document
 
@@ -201,7 +209,15 @@ def chat_with_rag(
             f"Question: {payload.message}\n\nAnswer:"
         )
 
-        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, streaming=True, max_tokens=500)
+        llm = AzureChatOpenAI(
+            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+            api_key=_az.AZURE_OPENAI_API_KEY,
+            api_version=_az.AZURE_OPENAI_API_VERSION,
+            temperature=0.0,
+            streaming=True,
+            max_tokens=500,
+        )
         
         full_response = ""
         try:

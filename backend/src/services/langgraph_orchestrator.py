@@ -4,7 +4,8 @@ import operator
 from sqlalchemy.orm import Session
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from src.core.config import settings as _az_settings
 from langgraph.graph import StateGraph, END
 from src.models.document import DocumentChunk
 
@@ -63,7 +64,12 @@ def retrieve_context(state: AgentState) -> dict:
             return {"context": data["context"], "sources": data["sources"]}
 
     print("CACHE MISS - HNSW vector search + FlashRank reranking")
-    embed_model = OpenAIEmbeddings(model="text-embedding-3-small")
+    embed_model = AzureOpenAIEmbeddings(
+        azure_deployment=_az_settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT,
+        azure_endpoint=_az_settings.AZURE_OPENAI_ENDPOINT,
+        api_key=_az_settings.AZURE_OPENAI_API_KEY,
+        api_version=_az_settings.AZURE_OPENAI_API_VERSION,
+    )
     query_vector = embed_model.embed_query(query)
 
     # 2b. Single global ANN query — HNSW index makes this O(log N) ~30ms
@@ -145,7 +151,13 @@ def generate_response(state: AgentState) -> dict:
     )
 
     formatted_prompt = prompt.format(context=context, question=query)
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.1)
+    llm = AzureChatOpenAI(
+        azure_deployment=_az_settings.AZURE_OPENAI_DEPLOYMENT,
+        azure_endpoint=_az_settings.AZURE_OPENAI_ENDPOINT,
+        api_key=_az_settings.AZURE_OPENAI_API_KEY,
+        api_version=_az_settings.AZURE_OPENAI_API_VERSION,
+        temperature=0.1,
+    )
 
     response = llm.invoke([HumanMessage(content=formatted_prompt)])
     return {"messages": [AIMessage(content=response.content)]}

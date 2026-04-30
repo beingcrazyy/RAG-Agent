@@ -4,7 +4,8 @@ import logging
 from sqlalchemy.orm import Session
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from src.core.config import settings as _az_settings
 from langchain_core.messages import HumanMessage
 
 from src.models.document import Document, DocumentChunk
@@ -20,7 +21,12 @@ def get_embedding_model():
     if _embedding_model is None:
         # OpenAI text-embedding-3-small natively produces 1536-dim vectors
         # No padding hack needed anymore!
-        _embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
+        _embedding_model = AzureOpenAIEmbeddings(
+            azure_deployment=_az_settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT,
+            azure_endpoint=_az_settings.AZURE_OPENAI_ENDPOINT,
+            api_key=_az_settings.AZURE_OPENAI_API_KEY,
+            api_version=_az_settings.AZURE_OPENAI_API_VERSION,
+        )
     return _embedding_model
 
 def process_document(db: Session, document_id: str):
@@ -60,7 +66,13 @@ def process_document(db: Session, document_id: str):
         combined_preview = " ".join([d.page_content for d in raw_docs])[:2000]
         
         try:
-            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+            llm = AzureChatOpenAI(
+                azure_deployment=_az_settings.AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=_az_settings.AZURE_OPENAI_ENDPOINT,
+                api_key=_az_settings.AZURE_OPENAI_API_KEY,
+                api_version=_az_settings.AZURE_OPENAI_API_VERSION,
+                temperature=0,
+            )
             routing_prompt = (
                 f"Analyze this text snippet and classify its PRIMARY structure into exactly one token: "
                 f"NARRATIVE, CODE, FINANCIAL_TABULAR, SHORT_FORM. "
