@@ -41,9 +41,19 @@ def process_document(db: Session, document_id: str):
             local_path = tmp.name
 
         # 2. Extract Text
+        # pymupdf4llm preserves table structure as Markdown (headers stay with rows).
+        # Falls back to PyPDFLoader for non-PDF or if pymupdf4llm fails.
         logger.info("Extracting document features..")
-        loader = PyPDFLoader(local_path)
-        raw_docs = loader.load()
+        try:
+            import pymupdf4llm
+            from langchain_core.documents import Document as LCDocument
+            md_text = pymupdf4llm.to_markdown(local_path)
+            raw_docs = [LCDocument(page_content=md_text, metadata={"source": doc.name, "page": 0})]
+            logger.info("Parsed with pymupdf4llm (Markdown, table-aware)")
+        except Exception as parse_err:
+            logger.warning(f"pymupdf4llm failed ({parse_err}), falling back to PyPDFLoader")
+            loader = PyPDFLoader(local_path)
+            raw_docs = loader.load()
 
         # 3. Agentic Chunking Routing — GPT-4o-mini classifies doc type
         logger.info("Agentically assessing document structure...")

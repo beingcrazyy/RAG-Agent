@@ -180,7 +180,7 @@ def chat_with_rag(
         for i, src in enumerate(sources, start=1):
             src_base = src.split(" \u2022 ")[0]
             parts = blocks_by_src.get(src_base, [])
-            combined_text = " [...] ".join(parts)[:1800]
+            combined_text = " [...] ".join(parts)[:2500]
             if combined_text:
                 numbered_lines.append(f"[{i}] {src_base}: {combined_text}")
 
@@ -188,22 +188,20 @@ def chat_with_rag(
 
         # Instruct the LLM to cite by number — appended AFTER the answer
         system_prompt = (
-            "You are an intelligent document assistant. Answer the question using ONLY the numbered sources below.\n"
-            "If the sources don't contain the answer, say so clearly.\n"
+            "You are a precise document assistant. Answer using ONLY the numbered sources below.\n"
+            "If the sources don't contain the answer, say so in one sentence.\n"
             "CRITICAL RULES:\n"
-            "1. Pay close attention to specific dates, fiscal periods, and time references in the question. "
-            "Only use figures from the EXACT date or period asked — never substitute data from a different date.\n"
-            "2. Each source is labeled with its filename. If the question asks about a specific company, "
-            "use ONLY sources from that company's document. Ignore data from other companies' documents.\n"
-            "3. Do not use your training knowledge — answer strictly from the sources provided.\n"
-            "At the very END of your complete answer, on a new line, output exactly:\n"
-            "[[USED:comma-separated-source-numbers-you-actually-used]] or [[USED:NONE]] if none helped.\n"
-            "Example: [[USED:1,3]]\n\n"
+            "1. Be concise — answer in 2-4 sentences maximum unless the question explicitly asks to 'analyze', 'explain', 'trace', or 'describe'. For those, use up to 6 sentences.\n"
+            "2. Use exact figures and dates from the sources. Only use figures from the EXACT date or period asked.\n"
+            "3. If the question asks about a specific company, use ONLY sources from that company's document.\n"
+            "4. Do not use training knowledge — answer strictly from the sources provided.\n"
+            "At the END of your answer, on a new line, output exactly:\n"
+            "[[USED:comma-separated-source-numbers]] or [[USED:NONE]]\n\n"
             f"Sources:\n{numbered_context}\n\n"
             f"Question: {payload.message}\n\nAnswer:"
         )
 
-        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, streaming=True)
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, streaming=True, max_tokens=500)
         
         full_response = ""
         try:
