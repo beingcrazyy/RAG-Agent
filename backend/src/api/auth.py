@@ -3,14 +3,22 @@ import secrets
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
+import bcrypt
 from src.db.session import get_db
 from src.models.workspace import User, Workspace
 from src.models.enterprise import Enterprise, EnterpriseUser
 from src.core.security import create_access_token
 
 router = APIRouter()
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def _hash_password(pw: str) -> str:
+    pw_bytes = pw.encode('utf-8')[:72]
+    return bcrypt.hashpw(pw_bytes, bcrypt.gensalt()).decode('utf-8')
+
+def _verify_password(pw: str, hashed: str) -> bool:
+    try:
+        return bcrypt.checkpw(pw.encode('utf-8')[:72], hashed.encode('utf-8'))
+    except Exception:
+        return False
 
 
 # ── Request / Response schemas ────────────────────────────────────────────────
@@ -69,7 +77,7 @@ def register_enterprise(payload: EnterpriseRegisterRequest, db: Session = Depend
         id=str(uuid.uuid4()),
         email=payload.email,
         name=payload.name,
-        hashed_password=pwd_context.hash(payload.password),
+        hashed_password=_hash_password(payload.password),
     )
     db.add(user)
     db.flush()
@@ -154,7 +162,7 @@ def register_user(payload: UserRegisterRequest, db: Session = Depends(get_db)):
         id=str(uuid.uuid4()),
         email=payload.email,
         name=payload.name,
-        hashed_password=pwd_context.hash(payload.password),
+        hashed_password=_hash_password(payload.password),
     )
     db.add(user)
     db.flush()
@@ -202,7 +210,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
     if not user or not user.hashed_password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    if not pwd_context.verify(payload.password, user.hashed_password):
+    if not _verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     membership = (
