@@ -9,10 +9,10 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
   const isAdmin = user?.role === 'admin';
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-  const authHeader = { "Authorization": "Bearer ${user?.access_token}" };
+  const authHeader = { "Authorization": `Bearer ${user?.access_token}` };
   const workspaceId = user?.workspace_id;
 
-  const logoSrc = user?.logo_url ? ${apiBase} : '/logo.png';
+  const logoSrc = user?.logo_url ? `${apiBase}${user.logo_url}` : '/logo.png';
   const brandName = user?.enterprise_name || 'Loomind';
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
 
   const fetchThreads = () => {
     if (!workspaceId) return;
-    fetch(${apiBase}/api/v1/chat/threads?workspace_id=, { headers: authHeader })
+    fetch(`${apiBase}/api/v1/chat/threads?workspace_id=${workspaceId}`, { headers: authHeader })
       .then(res => res.json())
       .then(data => setThreads(Array.isArray(data) ? data : []))
       .catch(err => console.error(err));
@@ -46,7 +46,7 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
 
   const handleNewThread = async () => {
     if (!workspaceId) return;
-    const res = await fetch(${apiBase}/api/v1/chat/threads?workspace_id=, {
+    const res = await fetch(`${apiBase}/api/v1/chat/threads?workspace_id=${workspaceId}`, {
       method: "POST", headers: authHeader
     });
     const data = await res.json();
@@ -57,7 +57,7 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
 
   const handleDeleteThread = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    await fetch(${apiBase}/api/v1/chat/threads/, { method: "DELETE", headers: authHeader });
+    await fetch(`${apiBase}/api/v1/chat/threads/${id}`, { method: "DELETE", headers: authHeader });
     if (activeThreadId === id) { setActiveThreadId(null); setActiveView('home'); }
     fetchThreads();
   };
@@ -66,7 +66,7 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
   const navItem = (view: string, icon: React.ReactNode, label: string) => (
     <button
       onClick={() => { setActiveView(view); if (view !== 'chat') setActiveThreadId(null); }}
-      className={w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all }
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${activeView === view ? 'bg-[var(--color-brand-primary)] text-white shadow-md' : 'text-[var(--color-light-text-secondary)] dark:text-[var(--color-dark-text-secondary)] hover:bg-slate-200/50 dark:hover:bg-slate-800 hover:text-[var(--color-light-text-primary)] dark:hover:text-[var(--color-dark-text-primary)]'}`}
       title={label}
     >
       <div className="w-5 h-5 shrink-0 flex items-center justify-center">{icon}</div>
@@ -99,9 +99,9 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
             <button
               title={chat.title}
               onClick={() => { setActiveThreadId(chat.id); setActiveView('chat'); }}
-              className={w-full text-left py-2 px-2 rounded-lg flex items-center gap-3  transition-colors}
+              className={`w-full text-left py-2 px-2 rounded-lg flex items-center gap-3 ${activeThreadId === chat.id ? 'bg-[var(--color-brand-primary)]/10 text-[var(--color-brand-primary)]' : 'text-[var(--color-light-text-secondary)] dark:text-[var(--color-dark-text-secondary)] hover:bg-slate-200/50 dark:hover:bg-slate-800'} transition-colors`}
             >
-              <div className={w-1.5 h-1.5 rounded-full shrink-0 } />
+              <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${activeThreadId === chat.id ? 'bg-[var(--color-brand-primary)]' : 'bg-slate-300 dark:bg-slate-600'}`} />
               <span className="flex-1 truncate text-[13px]">{chat.title}</span>
             </button>
             <button
@@ -130,7 +130,7 @@ export default function Sidebar({ activeView, setActiveView, activeThreadId, set
             <div className="flex flex-col flex-1 min-w-0 pr-2">
               <span className="font-semibold text-[14px] tracking-tight text-[var(--color-light-text-primary)] dark:text-[var(--color-dark-text-primary)] truncate">{user?.name || 'User'}</span>
               <span className="text-[11px] font-medium text-[var(--color-light-text-secondary)] dark:text-[var(--color-dark-text-secondary)] flex items-center gap-1.5">
-                <div className={w-1.5 h-1.5 rounded-full }></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${user?.role === 'admin' ? 'bg-[var(--color-brand-primary)]' : 'bg-slate-400'}`}></div>
                 {user?.role === 'admin' ? 'Admin' : 'Member'}
               </span>
             </div>

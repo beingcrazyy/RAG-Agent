@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remarkGfm';
+import remarkGfm from 'remark-gfm';
 import clsx from 'clsx';
 import { PaperAirplaneIcon, DocumentDuplicateIcon } from '@heroicons/react/24/solid';
 
@@ -20,37 +20,37 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
   const containerRef = useRef<HTMLDivElement>(null);
   
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-  const authHeader = { "Authorization": "Bearer ${user?.access_token}" };
+  const authHeader = { "Authorization": `Bearer ${user?.access_token}` };
   const workspaceId = user?.workspace_id;
 
-  const assistantLogoSrc = user?.logo_url ? ${apiBase} : '/logo.png';
+  const assistantLogoSrc = user?.logo_url ? `${apiBase}${user.logo_url}` : '/logo.png';
   const assistantName = user?.enterprise_name || 'Loomind';
 
   useEffect(() => {
     if (activeThreadId) {
-      fetch(${apiBase}/api/v1/chat/threads//messages, { headers: authHeader })
+      fetch(`${apiBase}/api/v1/chat/threads/${activeThreadId}/messages`, { headers: authHeader })
         .then(r => r.json())
         .then(data => {
           if (Array.isArray(data) && data.length > 0) {
             setMessages(data);
           } else {
-            setMessages([{ id: 'welcome', role: 'assistant', content: "Hi! I'm your  AI assistant. I can answer questions based on your knowledge base. What would you like to know?" }]);
+            setMessages([{ id: 'welcome', role: 'assistant', content: `Hi! I'm your ${assistantName} AI assistant. I can answer questions based on your knowledge base. What would you like to know?` }]);
           }
         });
-      fetch(${apiBase}/api/v1/chat/threads/, { headers: authHeader })
+      fetch(`${apiBase}/api/v1/chat/threads/${activeThreadId}`, { headers: authHeader })
         .then(r => r.json())
         .then(data => {
           if (data && data.title) { setThreadName(data.title); setEditTitleValue(data.title); }
         });
     } else {
-      setMessages([{ id: 'welcome', role: 'assistant', content: "Hi! I'm your  AI assistant. I can answer questions based on your knowledge base. What would you like to know?" }]);
+      setMessages([{ id: 'welcome', role: 'assistant', content: `Hi! I'm your ${assistantName} AI assistant. I can answer questions based on your knowledge base. What would you like to know?` }]);
       setThreadName('New Chat');
     }
   }, [activeThreadId]);
 
   useEffect(() => {
     if (!workspaceId) return;
-    fetch(${apiBase}/api/v1/documents/suggestions?workspace_id=, { headers: authHeader })
+    fetch(`${apiBase}/api/v1/documents/suggestions?workspace_id=${workspaceId}`, { headers: authHeader })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setSuggestions(data); })
       .catch(() => {});
@@ -72,8 +72,8 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
     setShowSuggestions(false);
 
     const now = Date.now();
-    const tempUserId = "user-";
-    const tempAssistantId = "assist-";
+    const tempUserId = `user-${now}`;
+    const tempAssistantId = `assist-${now}`;
 
     setMessages((prev: any[]) => [
       ...prev, 
@@ -82,7 +82,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
     ]);
 
     try {
-      const res = await fetch(${apiBase}/api/v1/chat/, {
+      const res = await fetch(`${apiBase}/api/v1/chat/`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader },
         body: JSON.stringify({ query: prompt, thread_id: activeThreadId })
@@ -131,7 +131,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
   const handleTitleSave = async () => {
     setIsEditingTitle(false);
     if (editTitleValue.trim() !== threadName && activeThreadId) {
-      await fetch(${apiBase}/api/v1/chat/threads/, {
+      await fetch(`${apiBase}/api/v1/chat/threads/${activeThreadId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", ...authHeader },
         body: JSON.stringify({ title: editTitleValue.trim() })
@@ -304,7 +304,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
               </div>
               <div className="bg-[#F9FAFB] dark:bg-[var(--color-dark-cards)] border border-[#ECECEC] dark:border-[var(--color-dark-border)] rounded-[18px] rounded-tl-sm px-5 py-4 shadow-sm flex items-center gap-1.5 h-[50px]">
                 {[0,1,2].map(i => (
-                  <span key={i} className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: "ms" }} />
+                  <span key={i} className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: `${i*150}ms` }} />
                 ))}
               </div>
             </div>
@@ -326,7 +326,7 @@ export default function CurrentChat({ activeThreadId, user }: { activeThreadId: 
                   handleSend(); 
                 } 
               }}
-              placeholder={Ask  anything...}
+              placeholder={`Ask ${assistantName} anything...`}
               className="w-full glass-input rounded-[20px] pt-4 pb-4 pl-5 pr-14 text-[15px] resize-none h-[100px] text-[var(--color-light-text-primary)] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none focus:border-[var(--color-brand-primary)] focus:ring-[3px] focus:ring-[var(--color-brand-primary)]/10 dark:focus:ring-[var(--color-brand-accent)]/20 transition-all"
             />
             <button
