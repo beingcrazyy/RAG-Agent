@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FolderIcon, DocumentTextIcon, CloudArrowUpIcon, MagnifyingGlassIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { FolderIcon, DocumentTextIcon, CloudArrowUpIcon, MagnifyingGlassIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon as DocumentTextIconSolid } from '@heroicons/react/24/solid';
 import type { AuthUser } from '../app/page';
 
 export default function DocumentManager({ user }: { user: AuthUser }) {
@@ -57,7 +58,7 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
         headers: authHeader,
         body: formData,
       });
-      if (!res.ok) { const e = await res.json(); alert(e.detail || 'Upload failed'); return; }
+      if (!res.ok) { const err = await res.json(); alert(err.detail || 'Upload failed'); return; }
       const docData = await res.json();
       setDynamicDocs(prev => [{ ...docData, category: categorize(docData.name) }, ...prev]);
     } catch (err: any) {
@@ -76,47 +77,46 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
     return matchesTab && matchesSearch;
   });
 
-  // ── Member view: don't show file names — just a summary of what they can ask
   if (!isAdmin) {
     const totalDocs = dynamicDocs.length;
     const categoryCounts: Record<string, number> = {};
     dynamicDocs.forEach(d => { categoryCounts[d.category] = (categoryCounts[d.category] || 0) + 1; });
 
     return (
-      <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#0a0a0a] overflow-y-auto">
-        <div className="px-10 py-10 border-b border-slate-200 dark:border-slate-800/50 bg-white dark:bg-[#0a0a0a]">
+      <div className="flex-1 flex flex-col h-full overflow-y-auto" style={{ background: 'var(--bg)' }}>
+        <div className="px-10 py-10" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-3">
-              <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
+            <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3" style={{ color: 'var(--text)' }}>
+              <DocumentTextIcon className="w-8 h-8" style={{ color: '#3b82f6' }} /> Knowledge Base
             </h2>
-            <p className="text-slate-500 mt-2">An overview of what your AI assistant has access to.</p>
+            <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>An overview of what your AI assistant has access to.</p>
           </div>
         </div>
 
         <div className="flex-1 p-10">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-sm">
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-2">Total documents indexed</p>
-              <p className="text-5xl font-bold text-slate-900 dark:text-white">{totalDocs}</p>
-              <p className="text-slate-500 mt-3 text-sm">You can ask the assistant any questions about the content of these documents.</p>
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="rounded-3xl p-8" style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)', boxShadow: '0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.03)' }}>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--text-secondary)' }}>Total documents indexed</p>
+              <p className="text-5xl font-bold" style={{ color: 'var(--text)' }}>{totalDocs}</p>
+              <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>You can ask the assistant any questions about the content of these documents.</p>
             </div>
 
             {Object.keys(categoryCounts).length > 0 && (
-              <div className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-sm">
-                <h3 className="font-bold text-slate-900 dark:text-white mb-4">Available content types</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="rounded-3xl p-8" style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)', boxShadow: '0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.03)' }}>
+                <h3 className="font-bold mb-4" style={{ color: 'var(--text)' }}>Available content types</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {Object.entries(categoryCounts).map(([cat, count]) => (
-                    <div key={cat} className="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{cat}</p>
-                      <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">{count}</p>
+                    <div key={cat} className="rounded-2xl p-4" style={{ border: '1px solid var(--border)' }}>
+                      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>{cat}</p>
+                      <p className="text-2xl font-bold mt-1" style={{ color: 'var(--text)' }}>{count}</p>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-900/40 rounded-2xl p-6 text-sm text-slate-700 dark:text-slate-300">
-              <p className="font-semibold mb-1">Tip</p>
+            <div className="rounded-2xl p-5 text-sm" style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)', color: 'var(--text-secondary)' }}>
+              <p className="font-semibold mb-1" style={{ color: 'var(--text)' }}>Tip</p>
               <p>Try asking specific questions like &quot;What was the Q4 revenue?&quot; or &quot;Summarize the latest policy update.&quot; The assistant will search across the documents and cite its sources.</p>
             </div>
           </div>
@@ -126,16 +126,16 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#0a0a0a] transition-colors overflow-hidden">
+    <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg)' }}>
 
       {/* Header */}
-      <div className="px-10 py-10 border-b border-slate-200 dark:border-slate-800/50 bg-white dark:bg-[#0a0a0a]">
+      <div className="px-10 py-10" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-3">
-              <FolderIcon className="w-8 h-8 text-red-500" /> Knowledge Base
+            <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3" style={{ color: 'var(--text)' }}>
+              <DocumentTextIcon className="w-8 h-8" style={{ color: '#3b82f6' }} /> Knowledge Base
             </h2>
-            <p className="text-slate-500 mt-2">
+            <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
               Manage documents that power your enterprise AI.
             </p>
           </div>
@@ -143,96 +143,98 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
           <>
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="application/pdf" />
             <button onClick={() => fileInputRef.current?.click()} disabled={isUploading}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 px-6 font-semibold transition-all shadow-md disabled:opacity-50">
-              <CloudArrowUpIcon className={`w-6 h-6 ${isUploading ? "animate-pulse" : ""}`} />
+              className="flex items-center gap-2 text-white rounded-2xl py-3 px-6 font-semibold transition-all shadow-lg disabled:opacity-50"
+              style={{ background: 'linear-gradient(135deg, #3b82f6, #2563eb)', boxShadow: '0 2px 8px rgba(59,130,246,0.25)' }}>
+              <CloudArrowUpIcon className={`w-5 h-5 ${isUploading ? "animate-pulse" : ""}`} />
               {isUploading ? "Uploading & indexing…" : "Upload Document"}
             </button>
           </>
         </div>
         {isUploading && (
           <div className="max-w-6xl mx-auto mt-4">
-            <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-900/40 rounded-xl px-4 py-3 text-sm text-amber-800 dark:text-amber-300 flex items-center gap-3">
-              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-              <span><strong>Indexing your document…</strong> This usually takes 10–30 seconds depending on size. Once it&apos;s ready, you&apos;ll be able to ask questions about it.</span>
+            <div className="rounded-2xl px-4 py-3 text-sm flex items-center gap-3"
+              style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)', color: 'var(--text-secondary)' }}>
+              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#3b82f6' }} />
+              <span><strong>Indexing your document…</strong> This usually takes 10–30 seconds depending on size.</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-10">
+      <div className="flex-1 overflow-y-auto p-10" style={{ background: 'var(--bg)' }}>
         <div className="max-w-6xl mx-auto flex flex-col h-full">
 
           {/* Tabs and Search */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 dark:border-slate-800/50 pb-4">
-
-            {/* Horizontal Tabs */}
-            <div className="flex items-center overflow-x-auto gap-2 pb-2 md:pb-0 hide-scrollbar pt-2">
-               {tabs.map((tab) => (
-                 <button
-                   key={tab}
-                   onClick={() => setActiveTab(tab)}
-                   className={`px-4 py-2 rounded-full font-medium text-[14px] whitespace-nowrap transition-all ${activeTab === tab ? "bg-slate-900 dark:bg-white text-white dark:text-black shadow-md" : "bg-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800"}`}
-                 >
-                   {tab}
-                   {tab === 'All Documents' && <span className={`ml-2 text-xs opacity-70 px-1.5 py-0.5 rounded-md ${activeTab === tab ? 'bg-white/20 dark:bg-black/20' : 'bg-slate-200 dark:bg-slate-800'}`}>{dynamicDocs.length}</span>}
-                 </button>
-               ))}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
+            <div className="flex items-center overflow-x-auto gap-2 hide-scrollbar">
+              {tabs.map((tab) => (
+                <button key={tab} onClick={() => setActiveTab(tab)}
+                  className="px-4 py-2 rounded-full font-medium text-[14px] whitespace-nowrap transition-all"
+                  style={activeTab === tab
+                    ? { background: '#3b82f6', color: '#fff', boxShadow: '0 2px 6px rgba(59,130,246,0.2)' }
+                    : { color: 'var(--text-secondary)', background: 'transparent' }
+                  }>
+                  {tab}
+                  {tab === 'All Documents' && <span className="ml-2 text-xs opacity-70">{dynamicDocs.length}</span>}
+                </button>
+              ))}
             </div>
 
-            {/* Global Search Bar */}
-            <div className="relative w-full md:w-80 shrink-0">
-              <MagnifyingGlassIcon className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Search files..." 
+            <div className="relative w-full md:w-72 shrink-0">
+              <MagnifyingGlassIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+              <input
+                type="text"
+                placeholder="Search files…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-full py-2.5 pl-11 pr-4 text-[14px] font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-red-500 shadow-sm transition-all"
+                className="w-full rounded-2xl py-2.5 pl-11 pr-4 text-[14px] font-medium outline-none transition-all"
+                style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)', color: 'var(--text)' }}
               />
             </div>
-
           </div>
 
-          {/* Categorized Documents Grid */}
+          {/* Documents Grid */}
           <div className="flex-1">
-             {filteredDocs.length === 0 ? (
-               <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-                 <FolderIcon className="w-12 h-12 mb-4 text-slate-300 dark:text-slate-700" />
-                 <p className="text-[15px] font-medium">No documents match your filters.</p>
-               </div>
-             ) : (
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                 {filteredDocs.map((doc: any) => (
-                   <div key={doc.id} className="flex flex-col bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 hover:border-red-500/50 hover:shadow-lg hover:-translate-y-0.5 transition-all group">
-                     
-                     <div className="flex items-start justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center">
-                          <DocumentTextIcon className={`w-5 h-5 ${doc.status === 'READY' ? 'text-red-500' : 'text-amber-500 animate-pulse'}`} />
-                        </div>
-                        <button 
-                          onClick={(e) => handleDeleteDocument(e, doc.id)}
-                          className={`text-slate-300 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] p-1.5 rounded-lg transition-all ${!isAdmin ? 'invisible' : ''}`}
-                          disabled={!isAdmin}
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
-                     </div>
+            {filteredDocs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20" style={{ color: 'var(--text-muted)' }}>
+                <FolderIcon className="w-12 h-12 mb-4 opacity-40" />
+                <p className="text-[15px] font-medium">No documents match your filters.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredDocs.map((doc: any) => (
+                  <div key={doc.id} className="flex flex-col rounded-3xl p-5 group transition-all"
+                    style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(59,130,246,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
 
-                     <div className="flex flex-col flex-1">
-                       <span className="font-semibold text-[15px] tracking-tight text-slate-900 dark:text-slate-100 line-clamp-1" title={doc.name}>{doc.name}</span>
-                       <span className="text-[11px] font-medium text-slate-400 uppercase tracking-widest mt-1">{doc.category}</span>
-                       <div className="flex items-center justify-between mt-4">
-                         <span className="text-[11px] font-medium text-slate-500">{doc.size}</span>
-                         <span className={`text-[9px] uppercase font-bold tracking-widest rounded-md px-2 py-1 ${doc.status === 'READY' ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm' : 'bg-amber-100 text-amber-700'}`}>
-                           {doc.status}
-                         </span>
-                       </div>
-                     </div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(59,130,246,0.08)' }}>
+                        <DocumentTextIconSolid className={`w-5 h-5 ${doc.status === 'READY' ? 'text-blue-500' : 'text-amber-500 animate-pulse'}`} />
+                      </div>
+                      <button
+                        onClick={(e) => handleDeleteDocument(e, doc.id)}
+                        className="p-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
+                        style={{ background: 'var(--surface-hover)' }}>
+                        <TrashIcon className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                      </button>
+                    </div>
 
-                   </div>
-                 ))}
-               </div>
-             )}
+                    <div className="flex flex-col flex-1">
+                      <span className="font-semibold text-[15px] tracking-tight line-clamp-1" style={{ color: 'var(--text)' }} title={doc.name}>{doc.name}</span>
+                      <span className="text-[11px] font-medium uppercase tracking-widest mt-1" style={{ color: 'var(--text-muted)' }}>{doc.category}</span>
+                      <div className="flex items-center justify-between mt-4">
+                        <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{doc.size}</span>
+                        <span className="text-[9px] uppercase font-bold tracking-widest rounded-lg px-2 py-1"
+                          style={doc.status === 'READY' ? { background: 'rgba(59,130,246,0.08)', color: '#3b82f6' } : { background: 'rgba(245,158,11,0.1)', color: '#f59e0b' }}>
+                          {doc.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

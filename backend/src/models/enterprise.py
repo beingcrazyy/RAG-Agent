@@ -17,7 +17,15 @@ class Enterprise(Base):
     logo_url = Column(String, nullable=True)
     theme_json = Column(JSON, nullable=True)             # {"primary_color": "#e00", ...}
     system_prompt = Column(Text, nullable=True)          # org-level agent persona
-    llm_model = Column(String, default="gpt-4.1-mini")  # preset model choice
+    llm_model = Column(String, default="gpt-4.1-mini")  # preset model choice (for backward compat)
+
+    # Multi-provider LLM configuration
+    llm_provider = Column(String, default="azure_openai")  # azure_openai, openai, anthropic, gemini
+    llm_api_key = Column(Text, nullable=True)  # encrypted API key (optional - use workspace credentials if not set)
+    llm_endpoint = Column(Text, nullable=True)  # for Azure: endpoint URL
+    llm_deployment = Column(String, nullable=True)  # for Azure: deployment name
+    llm_api_version = Column(String, nullable=True)  # for Azure: API version
+
     workspace_id = Column(UUID(as_uuid=True), ForeignKey("workspace.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 

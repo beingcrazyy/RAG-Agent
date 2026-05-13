@@ -1,53 +1,55 @@
 @import "tailwindcss";
 
-/* Tailwind v4: use class-based dark mode so next-themes' <html class="dark"> works */
+/* Dark mode via next-themes' class */
 @variant dark (&:where(.dark, .dark *));
 
+:root {
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --accent-glow: rgba(59, 130, 246, 0.25);
+  --accent-dim: rgba(59, 130, 246, 0.1);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+
 body {
-  font-family: 'Mona Sans Variable', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
   margin: 0;
   overflow: hidden;
   height: 100vh;
 }
 
-/* Glass UI Elements - Dynamic over Context */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
-}
-
-.dark .glass-panel {
-  background: rgba(18, 18, 18, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.3);
-}
-
-.glass-input {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-}
-
-.dark .glass-input {
-  background: rgba(15, 15, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-input:focus {
-  border-color: #ef4444; /* Red core accent focus */
-  outline: none;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); /* Soft Red halo */
-}
-
-/* Internal overrides to match Red / Black styling */
-.prose-a {
-  color: #ef4444 !important;
-}
-
-/* Scrollbar tweaks */
-::-webkit-scrollbar { width: 5px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(100, 100, 100, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(100, 100, 100, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.35); }
+
+/* Glass surfaces */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.glass-dark {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Glow effects */
+.glow-blue { box-shadow: 0 0 24px var(--accent-glow); }
+.glow-sm { box-shadow: 0 0 10px var(--accent-glow); }
+
+/* Accent */
+.prose-a { color: var(--accent) !important; }
+
+/* Subtle card shadow */
+.card-shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12), 0 8px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}

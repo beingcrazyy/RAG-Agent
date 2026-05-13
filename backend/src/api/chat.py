@@ -15,6 +15,96 @@ import uuid as _uuid
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
 
+
+def get_llm_for_enterprise(enterprise, db):
+    """Get LLM instance based on enterprise's LLM configuration."""
+    from langchain_openai import AzureChatOpenAI, OpenAI
+
+    if not enterprise or not enterprise.llm_provider:
+        # Fall back to default Azure config
+        from src.core.config import settings as _az
+        return AzureChatOpenAI(
+            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+            api_key=_az.AZURE_OPENAI_API_KEY,
+            api_version=_az.AZURE_OPENAI_API_VERSION,
+            temperature=0.3,
+        )
+
+    provider = enterprise.llm_provider
+    api_key = enterprise.llm_api_key
+
+    # Fall back to workspace credentials if no API key set at enterprise level
+    if not api_key:
+        from src.models.workspace import ProviderCredential
+        creds = db.query(ProviderCredential).filter(
+            ProviderCredential.workspace_id == enterprise.workspace_id
+        ).first()
+        if creds:
+            api_key = creds.encrypted_api_key
+
+    if not api_key:
+        # Fall back to default config
+        from src.core.config import settings as _az
+        return AzureChatOpenAI(
+            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+            api_key=_az.AZURE_OPENAI_API_KEY,
+            api_version=_az.AZURE_OPENAI_API_VERSION,
+            temperature=0.3,
+        )
+
+    if provider == "azure_openai":
+        return AzureChatOpenAI(
+            azure_deployment=enterprise.llm_deployment or enterprise.llm_model,
+            azure_endpoint=enterprise.llm_endpoint,
+            api_key=api_key,
+            api_version=enterprise.llm_api_version or "2024-12-01-preview",
+            temperature=0.3,
+        )
+    elif provider == "openai":
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(model=enterprise.llm_model, api_key=api_key, temperature=0.3)
+    elif provider == "anthropic":
+        # Anthropic - use direct SDK, wrap for langchain interface
+        try:
+            from langchain_anthropic import ChatAnthropic
+            return ChatAnthropic(model=enterprise.llm_model, anthropic_api_key=api_key)
+        except ImportError:
+            # Fallback to Azure if Anthropic not available
+            from src.core.config import settings as _az
+            return AzureChatOpenAI(
+                azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+                api_key=_az.AZURE_OPENAI_API_KEY,
+                api_version=_az.AZURE_OPENAI_API_VERSION,
+                temperature=0.3,
+            )
+    elif provider == "gemini":
+        try:
+            from langchain_google_genai import ChatGoogleGenerativeAI
+            return ChatGoogleGenerativeAI(model=enterprise.llm_model, api_key=api_key)
+        except ImportError:
+            # Fallback to Azure if Gemini not available
+            from src.core.config import settings as _az
+            return AzureChatOpenAI(
+                azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+                api_key=_az.AZURE_OPENAI_API_KEY,
+                api_version=_az.AZURE_OPENAI_API_VERSION,
+                temperature=0.3,
+            )
+    else:
+        # Default fallback
+        from src.core.config import settings as _az
+        return AzureChatOpenAI(
+            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+            api_key=_az.AZURE_OPENAI_API_KEY,
+            api_version=_az.AZURE_OPENAI_API_VERSION,
+            temperature=0.3,
+        )
+
 class ChatRequest(BaseModel):
     workspace_id: str
     thread_id: str
@@ -140,16 +230,13 @@ def chat_with_rag(
 
     if is_new:
         try:
-            from langchain_openai import AzureChatOpenAI
             from langchain_core.messages import HumanMessage
-            from src.core.config import settings as _az
-            llm = AzureChatOpenAI(
-                azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
-                azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
-                api_key=_az.AZURE_OPENAI_API_KEY,
-                api_version=_az.AZURE_OPENAI_API_VERSION,
-                temperature=0.3,
-            )
+            llm = get_llm_for_enterprise(enterprise, db)
+            # For title generation, use a simpler model if available
+            if enterprise and enterprise.llm_provider == "openai":
+                llm.model = "gpt-4o-mini"
+            elif enterprise and enterprise.llm_provider == "anthropic":
+                llm.model = "claude-haiku-4-5-20251001"
             ai_title_res = llm.invoke([
                 HumanMessage(content=f"Generate a strictly 2 to 4 word title summarizing this message: {payload.message}")
             ])
@@ -267,21 +354,16 @@ def chat_with_rag(
         )
 
         # Enterprise can pick from preset models; fall back to platform default
-        model_name = (enterprise.llm_model if enterprise and enterprise.llm_model else _az.AZURE_OPENAI_DEPLOYMENT)
-        llm = AzureChatOpenAI(
-            azure_deployment=model_name,
-            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
-            api_key=_az.AZURE_OPENAI_API_KEY,
-            api_version=_az.AZURE_OPENAI_API_VERSION,
-            temperature=0.3,
-            streaming=True,
-            max_tokens=1200,
-        )
-        
+        llm = get_llm_for_enterprise(enterprise, db)
+        # Set streaming and max_tokens for all providers
+        llm.streaming = True
+        if hasattr(llm, 'max_tokens'):
+            llm.max_tokens = 1200
+
         full_response = ""
         try:
             for chunk in llm.stream([HumanMessage(content=system_prompt)]):
-                token = chunk.content
+                token = chunk.content if hasattr(chunk, 'content') else str(chunk)
                 if token:
                     full_response += token
                     yield token.encode("utf-8")
@@ -340,3 +422,56 @@ def chat_with_rag(
 
     from fastapi.responses import StreamingResponse
     return StreamingResponse(generate_streaming_response(), media_type="text/plain; charset=utf-8")
+
+
+class FollowUpRequest(BaseModel):
+    workspace_id: str
+    thread_id: str
+    last_user_message: str
+    last_assistant_response: str
+
+
+@router.post("/follow-up-questions")
+def generate_follow_up_questions(
+    payload: FollowUpRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
+):
+    """Generate follow-up questions based on the last user message and assistant response."""
+    from langchain_openai import AzureChatOpenAI
+    from langchain_core.messages import HumanMessage
+    from src.core.config import settings as _az
+
+    try:
+        llm = AzureChatOpenAI(
+            azure_deployment=_az.AZURE_OPENAI_DEPLOYMENT,
+            azure_endpoint=_az.AZURE_OPENAI_ENDPOINT,
+            api_key=_az.AZURE_OPENAI_API_KEY,
+            api_version=_az.AZURE_OPENAI_API_VERSION,
+            temperature=0.7,
+        )
+
+        prompt = f"""Based on this conversation:
+User asked: {payload.last_user_message}
+Assistant answered: {payload.last_assistant_response[:500]}
+
+Generate 3 natural follow-up questions that the user might want to ask next.
+Return ONLY a JSON array with exactly 3 questions, nothing else.
+Example format: ["question 1", "question 2", "question 3"]"""
+
+        result = llm.invoke([HumanMessage(content=prompt)])
+        content = result.content.strip()
+
+        # Parse JSON array from response
+        import json
+        import re
+        match = re.search(r'\[.*\]', content, re.DOTALL)
+        if match:
+            questions = json.loads(match.group())
+            if isinstance(questions, list) and len(questions) > 0:
+                return {"follow_up_questions": questions[:3]}
+
+        return {"follow_up_questions": []}
+    except Exception as e:
+        return {"follow_up_questions": []}

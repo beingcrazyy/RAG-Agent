@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import '@fontsource-variable/mona-sans';
+import { ThemeProvider } from "../components/ThemeProvider";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-display" });
@@ -17,8 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${outfit.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-black dark:text-slate-100 transition-colors duration-300">
-        {children}
+      <body className="min-h-full flex flex-col transition-colors duration-300">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

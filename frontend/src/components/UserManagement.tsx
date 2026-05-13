@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { UserGroupIcon, CheckCircleIcon, XCircleIcon, ClockIcon } from '@heroicons/react/24/solid';
+import { UserGroupIcon, CheckCircleIcon, XCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
 import type { AuthUser } from '../app/page';
 
 interface Member {
@@ -13,12 +13,6 @@ interface Member {
   query_count: number;
   token_total: number;
 }
-
-const statusColors: Record<string, string> = {
-  active:  'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  pending: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-  revoked: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-};
 
 export default function UserManagement({ user }: { user: AuthUser }) {
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -53,40 +47,41 @@ export default function UserManagement({ user }: { user: AuthUser }) {
 
   const pending = members.filter(m => m.status === 'pending');
   const active  = members.filter(m => m.status === 'active');
-  const revoked = members.filter(m => m.status === 'revoked');
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-[#050505] overflow-y-auto px-8 py-10">
+    <div className="flex-1 flex flex-col h-full overflow-y-auto px-8 py-10" style={{ background: 'var(--bg)' }}>
       <div className="max-w-5xl mx-auto w-full space-y-8">
 
         {/* Header */}
-        <div className="border-b border-slate-200 dark:border-slate-800/50 pb-6">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-            <UserGroupIcon className="w-7 h-7 text-red-500" /> User Management
+        <div className="pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3" style={{ color: 'var(--text)' }}>
+            <UserGroupIcon className="w-7 h-7" style={{ color: '#3b82f6' }} /> User Management
           </h1>
-          <p className="text-slate-400 text-sm mt-1">Approve, revoke, and track all users in your enterprise.</p>
+          <p className="mt-1" style={{ color: 'var(--text-secondary)' }}>Approve, revoke, and track all users in your enterprise.</p>
         </div>
 
         {/* Pending Approvals */}
         {pending.length > 0 && (
-          <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700/40 rounded-2xl p-6">
-            <h3 className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-4">
-              <ClockIcon className="w-5 h-5" /> {pending.length} Pending Approval{pending.length > 1 ? 's' : ''}
+          <div className="rounded-3xl p-6" style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}>
+            <h3 className="font-bold flex items-center gap-2 mb-4" style={{ color: 'var(--text)' }}>
+              <ClockIcon className="w-5 h-5" style={{ color: '#3b82f6' }} /> {pending.length} Pending Approval{pending.length > 1 ? 's' : ''}
             </h3>
             <div className="space-y-3">
               {pending.map(m => (
-                <div key={m.user_id} className="flex items-center justify-between bg-white dark:bg-[#111] rounded-xl px-4 py-3 border border-amber-100 dark:border-amber-800/30">
+                <div key={m.user_id} className="flex items-center justify-between rounded-2xl px-4 py-3" style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)' }}>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white text-sm">{m.name || m.email}</p>
-                    <p className="text-xs text-slate-400">{m.email}</p>
+                    <p className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{m.name || m.email}</p>
+                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{m.email}</p>
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => approve(m.user_id)} disabled={actionLoading === m.user_id + '-approve'}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-green-600 hover:bg-green-500 text-white text-xs font-semibold rounded-lg transition-all disabled:opacity-60">
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-semibold rounded-xl transition-all disabled:opacity-60"
+                      style={{ background: '#3b82f6', boxShadow: '0 2px 6px rgba(59,130,246,0.2)' }}>
                       <CheckCircleIcon className="w-3.5 h-3.5" /> Approve
                     </button>
                     <button onClick={() => revoke(m.user_id)} disabled={actionLoading === m.user_id + '-revoke'}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-lg transition-all disabled:opacity-60">
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl transition-all disabled:opacity-60"
+                      style={{ background: 'var(--surface)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}>
                       <XCircleIcon className="w-3.5 h-3.5" /> Deny
                     </button>
                   </div>
@@ -97,50 +92,56 @@ export default function UserManagement({ user }: { user: AuthUser }) {
         )}
 
         {/* All Users Table */}
-        <div className="bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-4">All Members ({members.length})</h3>
+        <div className="rounded-3xl p-6" style={{ background: 'var(--bg-sidebar)', border: '1px solid var(--border)', boxShadow: '0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.03)' }}>
+          <h3 className="font-bold mb-5" style={{ color: 'var(--text)' }}>All Members ({members.length})</h3>
           {loading ? (
-            <p className="text-slate-400 text-sm animate-pulse">Loading…</p>
+            <p className="text-sm animate-pulse" style={{ color: 'var(--text-muted)' }}>Loading…</p>
           ) : members.length === 0 ? (
-            <p className="text-slate-400 text-sm">No users yet. Share your invite link to get started.</p>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No users yet. Share your invite link to get started.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
                     {['Name', 'Email', 'Role', 'Status', 'Queries', 'Tokens', 'Actions'].map(h => (
-                      <th key={h} className="text-left py-2 pr-4 font-semibold text-slate-400 text-xs uppercase tracking-wider whitespace-nowrap">{h}</th>
+                      <th key={h} className="text-left py-3 pr-4 font-semibold text-xs uppercase tracking-wider whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {members.map(m => (
-                    <tr key={m.user_id} className="border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                      <td className="py-3 pr-4 font-medium text-slate-900 dark:text-white whitespace-nowrap">{m.name || '—'}</td>
-                      <td className="py-3 pr-4 text-slate-500 text-xs">{m.email}</td>
+                    <tr key={m.user_id} className="transition-colors" style={{ borderBottom: '1px solid var(--border)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-hover)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      <td className="py-3 pr-4 font-medium whitespace-nowrap" style={{ color: 'var(--text)' }}>{m.name || '—'}</td>
+                      <td className="py-3 pr-4 text-xs" style={{ color: 'var(--text-secondary)' }}>{m.email}</td>
                       <td className="py-3 pr-4">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${m.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                          style={m.role === 'admin' ? { background: 'rgba(139,92,246,0.1)', color: '#8b5cf6' } : { background: 'var(--surface)', color: 'var(--text-secondary)' }}>
                           {m.role}
                         </span>
                       </td>
                       <td className="py-3 pr-4">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[m.status] || ''}`}>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                          style={m.status === 'active' ? { background: 'rgba(34,197,94,0.1)', color: '#22c55e' } : m.status === 'pending' ? { background: 'rgba(245,158,11,0.1)', color: '#f59e0b' } : { background: 'rgba(239,68,68,0.1)', color: '#ef4444' }}>
                           {m.status}
                         </span>
                       </td>
-                      <td className="py-3 pr-4 text-slate-700 dark:text-slate-300 font-medium">{m.query_count}</td>
-                      <td className="py-3 pr-4 text-slate-500 text-xs font-mono">{(m.token_total / 1000).toFixed(1)}K</td>
+                      <td className="py-3 pr-4 font-medium" style={{ color: 'var(--text)' }}>{m.query_count}</td>
+                      <td className="py-3 pr-4 text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{(m.token_total / 1000).toFixed(1)}K</td>
                       <td className="py-3">
                         <div className="flex gap-1.5">
                           {m.status !== 'active' && (
                             <button onClick={() => approve(m.user_id)} disabled={actionLoading === m.user_id + '-approve'}
-                              className="px-2.5 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-lg hover:bg-green-200 transition-all disabled:opacity-60">
+                              className="px-2.5 py-1 text-xs font-semibold rounded-xl transition-all disabled:opacity-60"
+                              style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6' }}>
                               Approve
                             </button>
                           )}
                           {m.status === 'active' && m.role !== 'admin' && (
                             <button onClick={() => revoke(m.user_id)} disabled={actionLoading === m.user_id + '-revoke'}
-                              className="px-2.5 py-1 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-semibold rounded-lg hover:bg-red-200 transition-all disabled:opacity-60">
+                              className="px-2.5 py-1 text-xs font-semibold rounded-xl transition-all disabled:opacity-60"
+                              style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}>
                               Revoke
                             </button>
                           )}
