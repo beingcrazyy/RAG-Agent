@@ -401,6 +401,17 @@ def chat_with_rag(
         # Log query + token usage for enterprise analytics
         if enterprise_id:
             try:
+                # Count tokens more accurately using tiktoken
+                try:
+                    import tiktoken
+                    enc = tiktoken.get_encoding("cl100k_base")
+                    tokens_in = len(enc.encode(system_prompt))
+                    tokens_out = len(enc.encode(full_response))
+                except:
+                    # Fallback to word count approximation
+                    tokens_in = len(system_prompt.split())
+                    tokens_out = len(full_response.split())
+
                 db.add(QueryLog(
                     id=_uuid.uuid4(),
                     enterprise_id=enterprise_id,
@@ -411,9 +422,9 @@ def chat_with_rag(
                     id=_uuid.uuid4(),
                     enterprise_id=enterprise_id,
                     user_id=current_user.id,
-                    tokens_in=len(numbered_context) // 4,
-                    tokens_out=len(clean_stored) // 4,
-                    model=model_name,
+                    tokens_in=tokens_in,
+                    tokens_out=tokens_out,
+                    model=enterprise.llm_model if enterprise and enterprise.llm_model else "gpt-4.1-mini",
                 ))
             except Exception:
                 pass  # never let logging break the chat response
