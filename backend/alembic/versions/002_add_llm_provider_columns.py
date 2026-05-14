@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 # revision identifiers
 revision = '002_add_llm_provider'
-down_revision = '053d183cb4f3_initial'
+down_revision = '001_enterprise'
 branch_labels = None
 depends_on = None
 

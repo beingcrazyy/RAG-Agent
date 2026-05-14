@@ -37,6 +37,7 @@ def process_document(db: Session, document_id: str):
         return
     
     doc.status = "PROCESSING"
+    doc.progress = 0
     db.commit()
 
     try:
@@ -60,6 +61,9 @@ def process_document(db: Session, document_id: str):
             logger.warning(f"pymupdf4llm failed ({parse_err}), falling back to PyPDFLoader")
             loader = PyPDFLoader(local_path)
             raw_docs = loader.load()
+
+        doc.progress = 20
+        db.commit()
 
         # 3. Agentic Chunking Routing — GPT-4o-mini classifies doc type
         logger.info("Agentically assessing document structure...")
@@ -107,6 +111,9 @@ def process_document(db: Session, document_id: str):
 
         chunks = text_splitter.split_documents(raw_docs)
 
+        doc.progress = 40
+        db.commit()
+
         # 4. Embeddings & Persistence
         logger.info("Generating embeddings and writing vectors..")
         embed_model = get_embedding_model()
@@ -151,6 +158,9 @@ def process_document(db: Session, document_id: str):
 
         db.add_all(db_chunks)
 
+        doc.progress = 70
+        db.commit()
+
         # ── Generate document summary + suggested questions (one LLM call) ────
         try:
             summary_llm = AzureChatOpenAI(
@@ -184,7 +194,11 @@ def process_document(db: Session, document_id: str):
         except Exception as e:
             logger.warning(f"Summary generation failed: {e}")
 
+        doc.progress = 90
+        db.commit()
+
         doc.status = "READY"
+        doc.progress = 100
         db.commit()
         logger.info(f"Successfully processed Document {doc.id}")
 
@@ -192,6 +206,7 @@ def process_document(db: Session, document_id: str):
         logger.error(f"Failed processing document {document_id}: {e}")
         db.rollback()
         doc.status = "FAILED"
+        doc.progress = 100
         db.commit()
     finally:
         if 'local_path' in locals() and os.path.exists(local_path):

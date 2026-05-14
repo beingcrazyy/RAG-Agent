@@ -40,7 +40,7 @@ def get_documents_for_workspace(
     ).order_by(Document.created_at.desc()).all()
 
     return [
-        {"id": str(d.id), "name": d.name, "status": d.status}
+        {"id": str(d.id), "name": d.name, "status": d.status, "progress": d.progress or 0, "size": d.file_size or "0 KB"}
         for d in docs
     ]
 
@@ -118,7 +118,7 @@ async def upload_document(
     upload_file(str(workspace.id), str(doc.id), file.filename, file_bytes)
     background_tasks.add_task(process_document, db, str(doc.id))
 
-    return {"id": str(doc.id), "name": doc.name, "status": doc.status}
+    return {"id": str(doc.id), "name": doc.name, "status": doc.status, "progress": doc.progress or 0}
 
 
 @router.delete("/{document_id}")
@@ -144,4 +144,20 @@ def delete_document(
     db.delete(doc)
     db.commit()
     return {"status": "deleted"}
+
+
+@router.get("/{document_id}/status")
+def get_document_status(
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    token_payload: dict = Depends(get_token_payload),
+):
+    doc = db.query(Document).filter(Document.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    token_ws = token_payload.get("workspace_id")
+    if token_ws and str(doc.workspace_id) != str(token_ws):
+        raise HTTPException(status_code=403, detail="Access denied")
+    return {"id": str(doc.id), "status": doc.status, "progress": doc.progress or 0, "name": doc.name}
 

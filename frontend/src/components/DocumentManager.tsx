@@ -14,6 +14,8 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
   const [searchQuery, setSearchQuery] = useState('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadDocName, setUploadDocName] = useState('');
   const [dynamicDocs, setDynamicDocs] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<string>('All Documents');
 
@@ -48,6 +50,9 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
     if (file.type !== "application/pdf") { alert("Please upload .pdf files only!"); return; }
 
     setIsUploading(true);
+    setUploadProgress(0);
+    setUploadDocName(file.name);
+
     try {
       const formData = new FormData();
       formData.append('workspace_id', workspaceId);
@@ -60,10 +65,29 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
       });
       if (!res.ok) { const err = await res.json(); alert(err.detail || 'Upload failed'); return; }
       const docData = await res.json();
-      setDynamicDocs(prev => [{ ...docData, category: categorize(docData.name) }, ...prev]);
+
+      // Poll progress until document is READY or FAILED
+      const pollProgress = async () => {
+        const statusRes = await fetch(`${apiBase}/api/v1/documents/${docData.id}/status`, { headers: authHeader });
+        if (statusRes.ok) {
+          const statusData = await statusRes.json();
+          setUploadProgress(statusData.progress);
+          if (statusData.status === 'READY') {
+            setDynamicDocs(prev => [{ ...statusData, category: categorize(statusData.name) }, ...prev]);
+            setIsUploading(false);
+          } else if (statusData.status === 'FAILED') {
+            setIsUploading(false);
+            alert('Document processing failed. Please try again.');
+          } else {
+            setTimeout(pollProgress, 1000);
+          }
+        } else {
+          setTimeout(pollProgress, 1000);
+        }
+      };
+      pollProgress();
     } catch (err: any) {
       alert("Upload failed: " + err.message);
-    } finally {
       setIsUploading(false);
       e.target.value = "";
     }
@@ -152,10 +176,18 @@ export default function DocumentManager({ user }: { user: AuthUser }) {
         </div>
         {isUploading && (
           <div className="max-w-6xl mx-auto mt-4">
-            <div className="rounded-2xl px-4 py-3 text-sm flex items-center gap-3"
-              style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)', color: 'var(--text-secondary)' }}>
-              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#3b82f6' }} />
-              <span><strong>Indexing your document…</strong> This usually takes 10–30 seconds depending on size.</span>
+            <div className="rounded-2xl px-4 py-3"
+              style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#3b82f6' }} />
+                  <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>{uploadDocName}</span>
+                </div>
+                <span className="text-sm font-semibold" style={{ color: '#3b82f6' }}>{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${uploadProgress}%`, background: 'linear-gradient(90deg, #3b82f6, #60a5fa)' }} />
+              </div>
             </div>
           </div>
         )}

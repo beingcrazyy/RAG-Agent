@@ -12,8 +12,10 @@ class Document(Base):
     name = Column(String, nullable=False)
     gcs_uri = Column(String, nullable=False)
     status = Column(String, default="PENDING") # PENDING, PROCESSING, READY, FAILED
+    progress = Column(Integer, default=0) # 0-100
     summary = Column(Text, nullable=True)
     suggested_questions = Column(JSON, nullable=True)  # list[str]
+    file_size = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     workspace = relationship("Workspace", back_populates="documents")
